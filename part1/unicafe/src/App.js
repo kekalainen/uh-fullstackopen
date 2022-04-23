@@ -5,9 +5,10 @@ const Button = ({ label, onClick }) => (
 );
 
 const StatisticLine = ({ label, value }) => (
-  <li>
-    {label}: {value}
-  </li>
+  <tr>
+    <td>{label}</td>
+    <td>{value}</td>
+  </tr>
 );
 
 const Statistics = ({ good, neutral, bad }) => {
@@ -18,14 +19,16 @@ const Statistics = ({ good, neutral, bad }) => {
   const positivePercentage = () => (good / total()) * 100 || 0;
 
   return (
-    <ul>
-      <StatisticLine label="good" value={good} />
-      <StatisticLine label="neutral" value={neutral} />
-      <StatisticLine label="bad" value={bad} />
-      <StatisticLine label="total" value={total()} />
-      <StatisticLine label="average" value={average()} />
-      <StatisticLine label="positive" value={positivePercentage() + '%'} />
-    </ul>
+    <table>
+      <tbody>
+        <StatisticLine label="good" value={good} />
+        <StatisticLine label="neutral" value={neutral} />
+        <StatisticLine label="bad" value={bad} />
+        <StatisticLine label="total" value={total()} />
+        <StatisticLine label="average" value={average()} />
+        <StatisticLine label="positive" value={positivePercentage() + '%'} />
+      </tbody>
+    </table>
   );
 };
 
