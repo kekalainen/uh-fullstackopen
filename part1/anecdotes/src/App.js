@@ -33,11 +33,19 @@ const App = () => {
     setPoints(newPoints);
   };
 
+  const mostVotedAnecdoteIndex = points.indexOf(Math.max(...points));
+
   return (
     <div>
+      <h1>Random anecdote</h1>
       <Anecdote anecdote={anecdotes[selected]} votes={points[selected]} />
       <button onClick={voteSelectedAnecdote}>vote</button>
       <button onClick={selectRandomAnecdote}>next anecdote</button>
+      <h1>Top voted anecdote</h1>
+      <Anecdote
+        anecdote={anecdotes[mostVotedAnecdoteIndex]}
+        votes={points[mostVotedAnecdoteIndex]}
+      />
     </div>
   );
 };
