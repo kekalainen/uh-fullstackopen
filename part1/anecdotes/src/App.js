@@ -1,5 +1,12 @@
 import { useState } from 'react';
 
+const Anecdote = ({ anecdote, votes }) => (
+  <div>
+    <div>{anecdote}</div>
+    <div>has {votes} votes</div>
+  </div>
+);
+
 const App = () => {
   const anecdotes = [
     'If it hurts, do it more often',
@@ -28,8 +35,7 @@ const App = () => {
 
   return (
     <div>
-      <div>{anecdotes[selected]}</div>
-      <div>has {points[selected]} votes</div>
+      <Anecdote anecdote={anecdotes[selected]} votes={points[selected]} />
       <button onClick={voteSelectedAnecdote}>vote</button>
       <button onClick={selectRandomAnecdote}>next anecdote</button>
     </div>
