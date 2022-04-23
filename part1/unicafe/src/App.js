@@ -4,6 +4,12 @@ const Button = ({ label, onClick }) => (
   <button onClick={onClick}>{label}</button>
 );
 
+const StatisticLine = ({ label, value }) => (
+  <li>
+    {label}: {value}
+  </li>
+);
+
 const Statistics = ({ good, neutral, bad }) => {
   if (good === 0 && neutral === 0 && bad === 0) return <p>No feedback given</p>;
 
@@ -13,12 +19,12 @@ const Statistics = ({ good, neutral, bad }) => {
 
   return (
     <ul>
-      <li>good: {good}</li>
-      <li>neutral: {neutral}</li>
-      <li>bad: {bad}</li>
-      <li>total: {total()}</li>
-      <li>average: {average()}</li>
-      <li>positive: {positivePercentage()}%</li>
+      <StatisticLine label="good" value={good} />
+      <StatisticLine label="neutral" value={neutral} />
+      <StatisticLine label="bad" value={bad} />
+      <StatisticLine label="total" value={total()} />
+      <StatisticLine label="average" value={average()} />
+      <StatisticLine label="positive" value={positivePercentage() + '%'} />
     </ul>
   );
 };
