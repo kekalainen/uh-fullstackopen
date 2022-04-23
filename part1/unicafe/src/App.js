@@ -5,22 +5,21 @@ const Button = ({ label, onClick }) => (
 );
 
 const Statistics = ({ good, neutral, bad }) => {
+  if (good === 0 && neutral === 0 && bad === 0) return <p>No feedback given</p>;
+
   const total = () => good + bad + neutral;
   const average = () => (good - bad) / total() || 0;
   const positivePercentage = () => (good / total()) * 100 || 0;
 
   return (
-    <div>
-      <h1>Statistics</h1>
-      <ul>
-        <li>good: {good}</li>
-        <li>neutral: {neutral}</li>
-        <li>bad: {bad}</li>
-        <li>total: {total()}</li>
-        <li>average: {average()}</li>
-        <li>positive: {positivePercentage()}%</li>
-      </ul>
-    </div>
+    <ul>
+      <li>good: {good}</li>
+      <li>neutral: {neutral}</li>
+      <li>bad: {bad}</li>
+      <li>total: {total()}</li>
+      <li>average: {average()}</li>
+      <li>positive: {positivePercentage()}%</li>
+    </ul>
   );
 };
 
@@ -35,6 +34,7 @@ const App = () => {
       <Button label="good" onClick={() => setGood(good + 1)} />
       <Button label="neutral" onClick={() => setNeutral(neutral + 1)} />
       <Button label="bad" onClick={() => setBad(bad + 1)} />
+      <h1>Statistics</h1>
       <Statistics good={good} neutral={neutral} bad={bad} />
     </div>
   );
