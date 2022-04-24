@@ -1,3 +1,5 @@
+import CountryWeather from './CountryWeather';
+
 const Country = ({ country }) => (
   <div>
     <h2>{country.name.common}</h2>
@@ -18,6 +20,7 @@ const Country = ({ country }) => (
       alt={`Flag of ${country.name.common}`}
       src={country.flags.svg}
     />
+    <CountryWeather country={country} />
   </div>
 );
 
