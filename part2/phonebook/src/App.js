@@ -1,7 +1,7 @@
-import axios from 'axios';
 import { useEffect, useState } from 'react';
 
 import { Filter, PersonForm, Persons } from './components';
+import personService from './services/persons';
 
 const App = () => {
   const [persons, setPersons] = useState([]);
@@ -20,9 +20,9 @@ const App = () => {
     if (persons.some((person) => person.name === newName))
       return alert(`${newName} is already present in the phonebook.`);
 
-    axios
-      .post('//localhost:3001/persons', { name: newName, number: newNumber })
-      .then((res) => setPersons(persons.concat(res.data)));
+    personService
+      .create({ name: newName, number: newNumber })
+      .then((person) => setPersons(persons.concat(person)));
 
     setNewName('');
     setNewNumber('');
@@ -31,7 +31,7 @@ const App = () => {
   const handleNameFilterChange = (event) => setNameFilter(event.target.value);
 
   useEffect(() => {
-    axios.get('//localhost:3001/persons').then((res) => setPersons(res.data));
+    personService.getAll().then((persons) => setPersons(persons));
   }, []);
 
   return (
