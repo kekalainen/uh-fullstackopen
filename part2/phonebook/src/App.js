@@ -1,6 +1,6 @@
 import { useState } from 'react';
 
-import { Filter, PersonForm } from './components';
+import { Filter, PersonForm, Persons } from './components';
 
 const App = () => {
   const [persons, setPersons] = useState([
@@ -31,10 +31,6 @@ const App = () => {
 
   const handleNameFilterChange = (event) => setNameFilter(event.target.value);
 
-  const filteredPersons = persons.filter((person) =>
-    person.name.toLowerCase().includes(nameFilter.toLowerCase())
-  );
-
   return (
     <div>
       <h1>Phonebook</h1>
@@ -48,11 +44,7 @@ const App = () => {
         onChangeNumber={handleNewNumberChange}
       />
       <h2>Numbers</h2>
-      {filteredPersons.map((person) => (
-        <div key={person.name}>
-          {person.name} {person.number}
-        </div>
-      ))}
+      <Persons persons={persons} nameFilter={nameFilter} />
     </div>
   );
 };
