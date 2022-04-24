@@ -25,7 +25,12 @@ const App = () => {
   if (filteredCountries.length === 1)
     countryComponent = <Country country={filteredCountries[0]} />;
   else if (filteredCountries.length <= 10)
-    countryComponent = <CountryList countries={filteredCountries} />;
+    countryComponent = (
+      <CountryList
+        countries={filteredCountries}
+        onSelectCountry={(name) => setCountryFilter(name)}
+      />
+    );
 
   return (
     <div>
