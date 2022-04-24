@@ -11,12 +11,19 @@ const Part = ({ part }) => (
 const Content = ({ parts }) =>
   parts.map((part) => <Part key={part.id} part={part} />);
 
-const Course = ({ course }) => (
-  <div>
-    <Header text={course.name} />
-    <Content parts={course.parts} />
-  </div>
-);
+const Course = ({ course }) => {
+  const total = course.parts
+    .map((part) => part.exercises)
+    .reduce((prev, cur) => prev + cur);
+
+  return (
+    <div>
+      <Header text={course.name} />
+      <Content parts={course.parts} />
+      <Total sum={total} />
+    </div>
+  );
+};
 
 const App = () => {
   const course = {
