@@ -1,7 +1,7 @@
 import axios from 'axios';
 import { useEffect, useState } from 'react';
 
-import { CountryList, FormInput } from './components';
+import { Country, CountryList, FormInput } from './components';
 
 const App = () => {
   const [countries, setCountries] = useState([]);
@@ -22,7 +22,9 @@ const App = () => {
 
   let countryComponent = <p>Too many matches, increase specificity.</p>;
 
-  if (filteredCountries.length <= 10)
+  if (filteredCountries.length === 1)
+    countryComponent = <Country country={filteredCountries[0]} />;
+  else if (filteredCountries.length <= 10)
     countryComponent = <CountryList countries={filteredCountries} />;
 
   return (

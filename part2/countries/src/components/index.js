@@ -1,4 +1,5 @@
+import Country from './Country';
 import CountryList from './CountryList';
 import FormInput from './FormInput';
 
-export { CountryList, FormInput };
+export { Country, CountryList, FormInput };
