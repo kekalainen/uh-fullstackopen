@@ -1,7 +1,7 @@
 import axios from 'axios';
 import { useEffect, useState } from 'react';
 
-import { CountryList } from './components';
+import { CountryList, FormInput } from './components';
 
 const App = () => {
   const [countries, setCountries] = useState([]);
@@ -12,10 +12,28 @@ const App = () => {
       .then((res) => setCountries(res.data));
   }, []);
 
+  const [countryFilter, setCountryFilter] = useState('');
+  const handleCountryFilterChange = (event) =>
+    setCountryFilter(event.target.value);
+
+  const filteredCountries = countries.filter((country) =>
+    country.name.common.toLowerCase().includes(countryFilter.toLowerCase())
+  );
+
+  let countryComponent = <p>Too many matches, increase specificity.</p>;
+
+  if (filteredCountries.length <= 10)
+    countryComponent = <CountryList countries={filteredCountries} />;
+
   return (
     <div>
       <h1>Countries</h1>
-      <CountryList countries={countries} />
+      <FormInput
+        label="Find by name"
+        value={countryFilter}
+        onChange={handleCountryFilterChange}
+      />
+      {countryComponent}
     </div>
   );
 };
