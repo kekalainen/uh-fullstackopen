@@ -42,4 +42,9 @@ app.get('/api/persons/:id', (request, response) => {
   response.json(person);
 });
 
+app.delete('/api/persons/:id', (request, response) => {
+  persons = persons.filter((person) => person.id !== +request.params.id);
+  response.status(204).end();
+});
+
 app.listen(port, () => console.log(`Server listening on port ${port}.`));
