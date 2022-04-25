@@ -1,0 +1,11 @@
+@baseUrl = http://localhost:3001/api/persons
+
+GET {{baseUrl}}
+
+###
+
+GET {{baseUrl}}/1
+
+###
+
+DELETE {{baseUrl}}/1
