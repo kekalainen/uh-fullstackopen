@@ -26,6 +26,14 @@ let persons = [
   },
 ];
 
+app.get('/info', (request, response) =>
+  response.send(
+    `The phonebook contains records of ${
+      persons.length
+    } people.<br>${new Date()}`
+  )
+);
+
 app.get('/api/persons', (request, response) => response.json(persons));
 
 app.listen(port, () => console.log(`Server listening on port ${port}.`));
