@@ -17,12 +17,34 @@ const App = () => {
   const addPerson = (event) => {
     event.preventDefault();
 
-    if (persons.some((person) => person.name === newName))
-      return alert(`${newName} is already present in the phonebook.`);
+    const duplicatePerson = persons.find((person) => person.name === newName);
 
-    personService
-      .create({ name: newName, number: newNumber })
-      .then((person) => setPersons(persons.concat(person)));
+    if (duplicatePerson !== undefined) {
+      if (duplicatePerson.number === newNumber)
+        return alert(`${newName} is already present in the phonebook.`);
+      else if (
+        window.confirm(
+          `${newName} is already present in the phonebook. Should their number be replaced?`
+        )
+      ) {
+        personService
+          .update(duplicatePerson.id, {
+            ...duplicatePerson,
+            number: newNumber,
+          })
+          .then((updatedPerson) =>
+            setPersons(
+              persons.map((person) =>
+                person.id !== updatedPerson.id ? person : updatedPerson
+              )
+            )
+          );
+      }
+    } else {
+      personService
+        .create({ name: newName, number: newNumber })
+        .then((person) => setPersons(persons.concat(person)));
+    }
 
     setNewName('');
     setNewNumber('');
