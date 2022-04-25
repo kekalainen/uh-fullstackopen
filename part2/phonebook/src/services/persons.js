@@ -8,5 +8,7 @@ const getAll = () => instance.get();
 
 const create = (data) => instance.post('', data);
 
-const personService = { getAll, create };
+const destroy = (id) => instance.delete(id.toString());
+
+const personService = { getAll, create, destroy };
 export default personService;

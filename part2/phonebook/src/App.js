@@ -30,6 +30,17 @@ const App = () => {
 
   const handleNameFilterChange = (event) => setNameFilter(event.target.value);
 
+  const handleDeletePerson = (person) => {
+    if (window.confirm(`Delete "${person.name}"?`))
+      personService
+        .destroy(person.id)
+        .then(() =>
+          setPersons(
+            persons.filter((statePerson) => statePerson.id !== person.id)
+          )
+        );
+  };
+
   useEffect(() => {
     personService.getAll().then((persons) => setPersons(persons));
   }, []);
@@ -47,7 +58,11 @@ const App = () => {
         onChangeNumber={handleNewNumberChange}
       />
       <h2>Numbers</h2>
-      <Persons persons={persons} nameFilter={nameFilter} />
+      <Persons
+        persons={persons}
+        nameFilter={nameFilter}
+        onDelete={handleDeletePerson}
+      />
     </div>
   );
 };
