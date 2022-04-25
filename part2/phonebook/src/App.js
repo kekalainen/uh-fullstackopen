@@ -47,6 +47,12 @@ const App = () => {
               )
             );
             showNotification(`Updated "${newName}".`);
+          })
+          .catch(() => {
+            setPersons(
+              persons.filter((person) => person.id !== duplicatePerson.id)
+            );
+            showNotification(`Failed to update "${newName}".`, 'error');
           });
       }
     } else {

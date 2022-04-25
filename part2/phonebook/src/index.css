@@ -11,3 +11,7 @@
 .notification.success {
   border-color: lightgreen;
 }
+
+.notification.error {
+  border-color: lightcoral;
+}
