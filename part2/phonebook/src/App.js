@@ -1,6 +1,6 @@
 import { useEffect, useState } from 'react';
 
-import { Filter, PersonForm, Persons } from './components';
+import { Filter, Notification, PersonForm, Persons } from './components';
 import personService from './services/persons';
 
 const App = () => {
@@ -10,9 +10,17 @@ const App = () => {
   const [newNumber, setNewNumber] = useState('');
 
   const [nameFilter, setNameFilter] = useState('');
+  const [notificationMessage, setNotificationMessage] = useState(null);
+  const [notificationType, setNotificationType] = useState('');
 
   const handleNewNameChange = (event) => setNewName(event.target.value);
   const handleNewNumberChange = (event) => setNewNumber(event.target.value);
+
+  const showNotification = (message, type = 'success') => {
+    setNotificationMessage(message);
+    setNotificationType(type);
+    setTimeout(() => setNotificationMessage(null), 3000);
+  };
 
   const addPerson = (event) => {
     event.preventDefault();
@@ -32,18 +40,22 @@ const App = () => {
             ...duplicatePerson,
             number: newNumber,
           })
-          .then((updatedPerson) =>
+          .then((updatedPerson) => {
             setPersons(
               persons.map((person) =>
                 person.id !== updatedPerson.id ? person : updatedPerson
               )
-            )
-          );
+            );
+            showNotification(`Updated "${newName}".`);
+          });
       }
     } else {
       personService
         .create({ name: newName, number: newNumber })
-        .then((person) => setPersons(persons.concat(person)));
+        .then((person) => {
+          setPersons(persons.concat(person));
+          showNotification(`Added "${newName}".`);
+        });
     }
 
     setNewName('');
@@ -70,6 +82,7 @@ const App = () => {
   return (
     <div>
       <h1>Phonebook</h1>
+      <Notification message={notificationMessage} type={notificationType} />
       <Filter value={nameFilter} onChange={handleNameFilterChange} />
       <h2>Add a person</h2>
       <PersonForm
