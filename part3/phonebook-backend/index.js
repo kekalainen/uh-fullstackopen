@@ -26,6 +26,8 @@ let persons = [
   },
 ];
 
+app.use(express.json());
+
 app.get('/info', (request, response) =>
   response.send(
     `The phonebook contains records of ${
@@ -33,6 +35,25 @@ app.get('/info', (request, response) =>
     } people.<br>${new Date()}`
   )
 );
+
+const generateId = () => {
+  const id = Math.ceil(Math.random() * 1000000);
+  if (persons.some((person) => person.id === id)) return generateId();
+  return id;
+};
+
+app.post('/api/persons', (request, response) => {
+  const body = request.body;
+
+  const person = {
+    id: generateId(),
+    name: body.name,
+    number: body.number,
+  };
+
+  persons.push(person);
+  response.json(person);
+});
 
 app.get('/api/persons', (request, response) => response.json(persons));
 

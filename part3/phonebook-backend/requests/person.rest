@@ -4,6 +4,16 @@ GET {{baseUrl}}
 
 ###
 
+POST {{baseUrl}}
+Content-Type: application/json
+
+{
+    "name": "Kekalainen",
+    "number": "040-404"
+}
+
+###
+
 GET {{baseUrl}}/1
 
 ###
