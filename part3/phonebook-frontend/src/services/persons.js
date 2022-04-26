@@ -1,6 +1,6 @@
 import axios from 'axios';
 
-const instance = axios.create({ baseURL: '//localhost:3001/persons' });
+const instance = axios.create({ baseURL: '/api/persons' });
 
 instance.interceptors.response.use((res) => res.data);
 
