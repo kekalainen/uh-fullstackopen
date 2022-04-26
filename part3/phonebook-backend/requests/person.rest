@@ -1,10 +1,10 @@
-@baseUrl = http://localhost:3001/api/persons
+@basePath = api/persons
 
-GET {{baseUrl}}
+GET {{baseUrl}}/{{basePath}}
 
 ###
 
-POST {{baseUrl}}
+POST {{baseUrl}}/{{basePath}}
 Content-Type: application/json
 
 {
@@ -14,8 +14,8 @@ Content-Type: application/json
 
 ###
 
-GET {{baseUrl}}/1
+GET {{baseUrl}}/{{basePath}}/1
 
 ###
 
-DELETE {{baseUrl}}/1
+DELETE {{baseUrl}}/{{basePath}}/1

@@ -1,0 +1,10 @@
+{
+  "rest-client.environmentVariables": {
+    "local": {
+      "baseUrl": "http://localhost:3001"
+    },
+    "production": {
+      "baseUrl": "https://uh-fullstackopen.herokuapp.com"
+    }
+  }
+}
