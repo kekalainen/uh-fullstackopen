@@ -6,6 +6,9 @@
   "scripts": {
     "start": "node index.js",
     "dev": "nodemon index.js",
+    "build": "heroku container:push web --app uh-fullstackopen",
+    "release": "heroku container:release web --app uh-fullstackopen",
+    "deploy": "npm run build && npm run release",
     "test": "echo \"Error: no test specified\" && exit 1"
   },
   "dependencies": {
