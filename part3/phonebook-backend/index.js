@@ -51,12 +51,14 @@ app.use(express.json());
 
 app.use(express.static('public'));
 
-app.get('/info', (request, response) =>
-  response.send(
-    `The phonebook contains records of ${
-      persons.length
-    } people.<br>${new Date()}`
-  )
+app.get('/info', (_request, response, next) =>
+  Person.countDocuments()
+    .then((count) =>
+      response.send(
+        `The phonebook contains records of ${count} people.<br>${new Date()}`
+      )
+    )
+    .catch((error) => next(error))
 );
 
 app.post('/api/persons', async (request, response) => {
