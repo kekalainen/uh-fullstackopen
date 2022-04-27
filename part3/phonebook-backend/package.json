@@ -11,6 +11,7 @@
     "build": "npm run build:frontend && npm run build:container",
     "release": "heroku container:release web --app uh-fullstackopen",
     "deploy": "npm run build && npm run release",
+    "lint": "eslint .",
     "test": "echo \"Error: no test specified\" && exit 1"
   },
   "dependencies": {
@@ -20,6 +21,7 @@
     "morgan": "^1.10.0"
   },
   "devDependencies": {
+    "eslint": "^8.14.0",
     "nodemon": "^2.0.15"
   }
 }
