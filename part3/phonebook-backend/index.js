@@ -78,11 +78,13 @@ app.get('/api/persons', (_request, response) =>
   Person.find().then((data) => response.json(data))
 );
 
-app.get('/api/persons/:id', (request, response) => {
-  const person = persons.find((person) => person.id === +request.params.id);
-  if (!person) return response.status(404).end();
-  response.json(person);
-});
+app.get('/api/persons/:id', (request, response, next) =>
+  Person.findById(request.params.id)
+    .then((person) =>
+      person ? response.json(person) : response.status(404).end()
+    )
+    .catch((error) => next(error))
+);
 
 app.put('/api/persons/:id', (request, response) => {
   const body = request.body,
