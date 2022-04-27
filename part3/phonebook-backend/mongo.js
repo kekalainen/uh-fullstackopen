@@ -18,25 +18,26 @@ const Person = mongoose.model(
 
 mongoose.connect(url).then(() => {
   switch (process.argv.length) {
-    case 3:
-      Person.find().then((data) => {
-        console.log('phonebook:');
-        data.forEach((person) => console.log(person.name, person.number));
-        mongoose.connection.close();
-      });
-      break;
-    case 5:
-      const name = process.argv[3],
-        number = process.argv[4];
-
-      const person = new Person({ name, number });
-
-      person.save().then(() => {
-        console.log(`added ${name} number ${number} to phonebook`);
-        mongoose.connection.close();
-      });
-      break;
-    default:
+  case 3:
+    Person.find().then((data) => {
+      console.log('phonebook:');
+      data.forEach((person) => console.log(person.name, person.number));
       mongoose.connection.close();
+    });
+    break;
+  case 5: {
+    const name = process.argv[3],
+      number = process.argv[4];
+
+    const person = new Person({ name, number });
+
+    person.save().then(() => {
+      console.log(`added ${name} number ${number} to phonebook`);
+      mongoose.connection.close();
+    });
+    break;
+  }
+  default:
+    mongoose.connection.close();
   }
 });
