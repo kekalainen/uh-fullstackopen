@@ -2,7 +2,10 @@ import axios from 'axios';
 
 const instance = axios.create({ baseURL: '/api/persons' });
 
-instance.interceptors.response.use((res) => res.data);
+instance.interceptors.response.use(
+  (res) => res.data,
+  (error) => Promise.reject(error?.response?.data?.error)
+);
 
 const getAll = () => instance.get();
 

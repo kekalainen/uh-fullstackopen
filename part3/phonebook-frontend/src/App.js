@@ -48,11 +48,14 @@ const App = () => {
             );
             showNotification(`Updated "${newName}".`);
           })
-          .catch(() => {
+          .catch((error) => {
             setPersons(
               persons.filter((person) => person.id !== duplicatePerson.id)
             );
-            showNotification(`Failed to update "${newName}".`, 'error');
+            showNotification(
+              error || `Failed to update "${newName}".`,
+              'error'
+            );
           });
       }
     } else {
@@ -61,7 +64,8 @@ const App = () => {
         .then((person) => {
           setPersons(persons.concat(person));
           showNotification(`Added "${newName}".`);
-        });
+        })
+        .catch((error) => showNotification(error, 'error'));
     }
 
     setNewName('');
