@@ -10,6 +10,8 @@ const Person = require('./models/person');
 const errorHandler = (error, _request, response, next) => {
   if (error.name === 'CastError')
     return response.status(400).send({ error: 'malformed id' });
+  else if (error.name === 'ValidationError')
+    return response.status(400).json({ error: error.message });
 
   console.error(error.message);
 
@@ -38,19 +40,16 @@ app.get('/info', (_request, response, next) =>
     .catch((error) => next(error))
 );
 
-app.post('/api/persons', async (request, response) => {
-  const body = request.body,
-    name = body.name,
-    number = body.number;
-
-  if (!name) return response.status(400).json({ error: 'name missing' });
-
-  if (!number) return response.status(400).json({ error: 'number missing' });
+app.post('/api/persons', async (request, response, next) => {
+  const { name, number } = request.body;
 
   if (await Person.exists({ name }))
     return response.status(400).json({ error: 'name must be unique' });
 
-  new Person({ name, number }).save().then((data) => response.json(data));
+  new Person({ name, number })
+    .save()
+    .then((data) => response.json(data))
+    .catch((error) => next(error));
 });
 
 app.get('/api/persons', (_request, response) =>
@@ -66,15 +65,13 @@ app.get('/api/persons/:id', (request, response, next) =>
 );
 
 app.put('/api/persons/:id', (request, response, next) => {
-  const body = request.body,
-    name = body.name,
-    number = body.number;
+  const { name, number } = request.body;
 
-  if (!name) return response.status(400).json({ error: 'name missing' });
-
-  if (!number) return response.status(400).json({ error: 'number missing' });
-
-  Person.findByIdAndUpdate(request.params.id, { name, number }, { new: true })
+  Person.findByIdAndUpdate(
+    request.params.id,
+    { name, number },
+    { new: true, runValidators: true }
+  )
     .then((person) => response.json(person))
     .catch((error) => next(error));
 });
