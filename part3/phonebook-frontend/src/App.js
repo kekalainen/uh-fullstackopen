@@ -49,9 +49,10 @@ const App = () => {
             showNotification(`Updated "${newName}".`);
           })
           .catch((error) => {
-            setPersons(
-              persons.filter((person) => person.id !== duplicatePerson.id)
-            );
+            if (!error)
+              setPersons(
+                persons.filter((person) => person.id !== duplicatePerson.id)
+              );
             showNotification(
               error || `Failed to update "${newName}".`,
               'error'
