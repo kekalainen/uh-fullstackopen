@@ -30,6 +30,15 @@ let persons = [
   },
 ];
 
+const errorHandler = (error, _request, response, next) => {
+  if (error.name === 'CastError')
+    return response.status(400).send({ error: 'malformed id' });
+
+  console.error(error.message);
+
+  next(error);
+};
+
 morgan.token('body', (request) =>
   request.method === 'POST' ? JSON.stringify(request.body) : null
 );
@@ -75,10 +84,12 @@ app.get('/api/persons/:id', (request, response) => {
   response.json(person);
 });
 
-app.delete('/api/persons/:id', (request, response) => {
+app.delete('/api/persons/:id', (request, response, next) => {
   Person.findByIdAndRemove(request.params.id)
     .then(() => response.status(204).end())
-    .catch((error) => console.error(error));
+    .catch((error) => next(error));
 });
+
+app.use(errorHandler);
 
 app.listen(port, () => console.log(`Server listening on port ${port}.`));
