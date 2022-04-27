@@ -1,8 +1,11 @@
+require('dotenv').config();
 const express = require('express');
 const morgan = require('morgan');
 
 const app = express();
 const port = process.env.PORT || 3001;
+
+const Person = require('./models/person');
 
 let persons = [
   {
@@ -74,7 +77,9 @@ app.post('/api/persons', (request, response) => {
   response.json(person);
 });
 
-app.get('/api/persons', (request, response) => response.json(persons));
+app.get('/api/persons', (_request, response) =>
+  Person.find().then((data) => response.json(data))
+);
 
 app.get('/api/persons/:id', (request, response) => {
   const person = persons.find((person) => person.id === +request.params.id);
