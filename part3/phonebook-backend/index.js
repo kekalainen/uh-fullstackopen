@@ -37,6 +37,8 @@ app.use(
 
 app.use(express.json());
 
+app.use(express.static('public'));
+
 app.get('/info', (request, response) =>
   response.send(
     `The phonebook contains records of ${
