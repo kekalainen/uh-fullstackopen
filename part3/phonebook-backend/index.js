@@ -50,31 +50,19 @@ app.get('/info', (request, response) =>
   )
 );
 
-const generateId = () => {
-  const id = Math.ceil(Math.random() * 1000000);
-  if (persons.some((person) => person.id === id)) return generateId();
-  return id;
-};
+app.post('/api/persons', async (request, response) => {
+  const body = request.body,
+    name = body.name,
+    number = body.number;
 
-app.post('/api/persons', (request, response) => {
-  const body = request.body;
+  if (!name) return response.status(400).json({ error: 'name missing' });
 
-  if (!body.name) return response.status(400).json({ error: 'name missing' });
+  if (!number) return response.status(400).json({ error: 'number missing' });
 
-  if (!body.number)
-    return response.status(400).json({ error: 'number missing' });
-
-  if (persons.some((person) => person.name === body.name))
+  if (await Person.exists({ name }))
     return response.status(400).json({ error: 'name must be unique' });
 
-  const person = {
-    id: generateId(),
-    name: body.name,
-    number: body.number,
-  };
-
-  persons.push(person);
-  response.json(person);
+  new Person({ name, number }).save().then((data) => response.json(data));
 });
 
 app.get('/api/persons', (_request, response) =>
