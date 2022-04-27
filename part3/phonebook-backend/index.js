@@ -76,8 +76,9 @@ app.get('/api/persons/:id', (request, response) => {
 });
 
 app.delete('/api/persons/:id', (request, response) => {
-  persons = persons.filter((person) => person.id !== +request.params.id);
-  response.status(204).end();
+  Person.findByIdAndRemove(request.params.id)
+    .then(() => response.status(204).end())
+    .catch((error) => console.error(error));
 });
 
 app.listen(port, () => console.log(`Server listening on port ${port}.`));
