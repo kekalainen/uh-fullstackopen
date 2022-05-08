@@ -95,6 +95,9 @@ describe('most blogs', () => {
 });
 
 describe('total likes', () => {
+  test('empty list of blogs returns zero', () =>
+    expect(listHelper.totalLikes([])).toBe(0));
+
   test('single blog', () => expect(listHelper.totalLikes(singleBlog)).toBe(5));
 
   test('multiple blogs', () => expect(listHelper.totalLikes(blogs)).toBe(36));
