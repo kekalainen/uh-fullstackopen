@@ -8,7 +8,7 @@ const favoriteBlog = (blogs) =>
     : null;
 
 const mostBlogs = (blogs) => {
-  if (!blogs.length) return;
+  if (!blogs.length) return null;
 
   let blogCounts = {};
 

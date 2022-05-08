@@ -81,8 +81,8 @@ describe('favorite blog', () => {
 });
 
 describe('most blogs', () => {
-  test('empty list of blogs returns undefined', () =>
-    expect(listHelper.mostBlogs([])).toBeUndefined());
+  test('empty list of blogs returns null', () =>
+    expect(listHelper.mostBlogs([])).toBeNull());
 
   test('single blog', () =>
     expect(listHelper.mostBlogs(singleBlog)).toEqual({
