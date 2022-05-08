@@ -7,24 +7,29 @@ const favoriteBlog = (blogs) =>
       )
     : null;
 
-const mostBlogs = (blogs) => {
+const mostBase = (type, blogs, callback) => {
   if (!blogs.length) return null;
 
-  let blogCounts = {};
+  let counts = {};
 
-  blogs.forEach(
-    (blog) => (blogCounts[blog.author] = (blogCounts[blog.author] ?? 0) + 1)
-  );
+  blogs.forEach((blog) => callback(blog, counts));
 
-  const highestCount = Object.entries(blogCounts).reduce((selected, current) =>
+  const highestCount = Object.entries(counts).reduce((selected, current) =>
     current[1] > selected[1] ? current : selected
   );
 
   return {
     author: highestCount[0],
-    blogs: highestCount[1],
+    [type]: highestCount[1],
   };
 };
+
+const mostBlogs = (blogs) =>
+  mostBase(
+    'blogs',
+    blogs,
+    (blog, counts) => (counts[blog.author] = (counts[blog.author] ?? 0) + 1)
+  );
 
 const totalLikes = (blogs) => blogs.reduce((sum, blog) => sum + blog.likes, 0);
 
