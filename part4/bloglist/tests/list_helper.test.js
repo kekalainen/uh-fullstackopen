@@ -77,6 +77,23 @@ describe('favorite blog', () => {
     expect(listHelper.favoriteBlog(blogs)).toEqual(blogs[2]));
 });
 
+describe('most blogs', () => {
+  test('empty list of blogs returns undefined', () =>
+    expect(listHelper.mostBlogs([])).toBeUndefined());
+
+  test('single blog', () =>
+    expect(listHelper.mostBlogs(singleBlog)).toEqual({
+      author: 'Edsger W. Dijkstra',
+      blogs: 1,
+    }));
+
+  test('multiple blogs', () =>
+    expect(listHelper.mostBlogs(blogs)).toEqual({
+      author: 'Robert C. Martin',
+      blogs: 3,
+    }));
+});
+
 describe('total likes', () => {
   test('single blog', () => expect(listHelper.totalLikes(singleBlog)).toBe(5));
 
