@@ -70,6 +70,9 @@ const blogs = [
 ];
 
 describe('favorite blog', () => {
+  test('empty list of blogs returns null', () =>
+    expect(listHelper.favoriteBlog([])).toBeNull());
+
   test('single blog', () =>
     expect(listHelper.favoriteBlog(singleBlog)).toBe(singleBlog[0]));
 

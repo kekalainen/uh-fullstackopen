@@ -1,9 +1,11 @@
 const dummy = (_blogs) => 1;
 
 const favoriteBlog = (blogs) =>
-  blogs.reduce((favorite, current) =>
-    current.likes > favorite.likes ? current : favorite
-  );
+  blogs.length
+    ? blogs.reduce((favorite, current) =>
+        current.likes > favorite.likes ? current : favorite
+      )
+    : null;
 
 const mostBlogs = (blogs) => {
   if (!blogs.length) return;
