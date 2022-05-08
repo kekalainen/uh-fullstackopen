@@ -31,11 +31,20 @@ const mostBlogs = (blogs) =>
     (blog, counts) => (counts[blog.author] = (counts[blog.author] ?? 0) + 1)
   );
 
+const mostLikes = (blogs) =>
+  mostBase(
+    'likes',
+    blogs,
+    (blog, counts) =>
+      (counts[blog.author] = (counts[blog.author] ?? 0) + blog.likes)
+  );
+
 const totalLikes = (blogs) => blogs.reduce((sum, blog) => sum + blog.likes, 0);
 
 module.exports = {
   dummy,
   favoriteBlog,
   mostBlogs,
+  mostLikes,
   totalLikes,
 };

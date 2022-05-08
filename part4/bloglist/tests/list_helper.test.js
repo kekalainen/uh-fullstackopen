@@ -97,6 +97,23 @@ describe('most blogs', () => {
     }));
 });
 
+describe('most likes', () => {
+  test('empty list of blogs returns zero', () =>
+    expect(listHelper.mostLikes([])).toBeNull());
+
+  test('single blog', () =>
+    expect(listHelper.mostLikes(singleBlog)).toEqual({
+      author: 'Edsger W. Dijkstra',
+      likes: 5,
+    }));
+
+  test('multiple blogs', () =>
+    expect(listHelper.mostLikes(blogs)).toEqual({
+      author: 'Edsger W. Dijkstra',
+      likes: 17,
+    }));
+});
+
 describe('total likes', () => {
   test('empty list of blogs returns zero', () =>
     expect(listHelper.totalLikes([])).toBe(0));
