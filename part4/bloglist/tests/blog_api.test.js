@@ -59,4 +59,12 @@ describe('creating a blog', () => {
     api.post('/api/blogs').send({}).expect(400));
 });
 
+describe('deleting a blog', () => {
+  test('succeeds with a valid ID', async () => {
+    const id = (await Blog.findOne({})).id;
+    await api.delete(`/api/blogs/${id}`).expect(204);
+    expect((await helper.blogsInDb()).map((blog) => blog.id)).not.toContain(id);
+  });
+});
+
 afterAll(() => mongoose.connection.close());
