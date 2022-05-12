@@ -59,6 +59,35 @@ describe('creating a blog', () => {
     api.post('/api/blogs').send({}).expect(400));
 });
 
+describe('updating a blog', () => {
+  test('succeeds with a valid ID and data', async () => {
+    const initialBlog = await Blog.findOne({
+      title: { $ne: helper.exampleBlog.title },
+    });
+
+    await api
+      .put(`/api/blogs/${initialBlog.id}`)
+      .send(helper.exampleBlog)
+      .expect(200);
+
+    const blog = await Blog.findById(initialBlog.id);
+
+    for (const key of Object.keys(helper.exampleBlog))
+      expect(blog[key]).toEqual(helper.exampleBlog[key]);
+  });
+
+  test('fails with an invalid ID', async () =>
+    api
+      .put(`/api/blogs/${await helper.nonExistingId()}`)
+      .send(helper.exampleBlog)
+      .expect(404));
+
+  test('fails with missing properties', async () => {
+    const initialBlog = await Blog.findOne({});
+    await api.put(`/api/blogs/${initialBlog.id}`).send({}).expect(400);
+  });
+});
+
 describe('deleting a blog', () => {
   test('succeeds with a valid ID', async () => {
     const id = (await Blog.findOne({})).id;
