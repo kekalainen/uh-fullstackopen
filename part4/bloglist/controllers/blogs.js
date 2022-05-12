@@ -44,7 +44,15 @@ router.put('/:id', async (request, response) => {
 });
 
 router.delete('/:id', async (request, response) => {
-  await Blog.findByIdAndRemove(request.params.id);
+  const authPayload = jwt.verify(request.authToken, JWT_SECRET);
+  const blog = await Blog.findById(request.params.id);
+
+  if (!blog) return response.status(204).end();
+
+  if (blog.user._id.toString() !== authPayload.id)
+    return response.status(403).json({ error: 'blog belongs to another user' });
+
+  await blog.remove();
   response.status(204).end();
 });
 
