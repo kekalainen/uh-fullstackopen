@@ -1,0 +1,28 @@
+const bcrypt = require('bcrypt');
+const express = require('express');
+
+const { BCRYPT_SALT_OR_ROUNDS } = require('../utils/config');
+const User = require('../models/user');
+
+const router = express.Router();
+
+router.get('/', async (_request, response) =>
+  response.json(await User.find({}))
+);
+
+router.post('/', async (request, response) => {
+  const { username, name, password } = request.body;
+
+  const passwordHash = await bcrypt.hash(password, BCRYPT_SALT_OR_ROUNDS);
+
+  const user = new User({
+    username,
+    name,
+    passwordHash,
+  });
+
+  const savedUser = await user.save();
+  response.status(201).json(savedUser);
+});
+
+module.exports = router;
