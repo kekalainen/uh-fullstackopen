@@ -1,4 +1,6 @@
+const { signToken } = require('../utils/auth');
 const Blog = require('../models/blog');
+const User = require('../models/user');
 
 const exampleBlog = {
   author: 'Example author',
@@ -45,6 +47,10 @@ const initialBlogs = [
   },
 ];
 
+const authorizationHeader = (user) => ({
+  Authorization: `Bearer ${signToken(user)}`,
+});
+
 const blogsInDb = async () =>
   (await Blog.find({})).map((blog) => blog.toJSON());
 
@@ -55,9 +61,20 @@ const nonExistingId = async () => {
   return blog._id.toString();
 };
 
+const initUsers = async () => {
+  await User.deleteMany({});
+  return await User.create({
+    username: 'test',
+    name: 'Test',
+    passwordHash: '*******',
+  });
+};
+
 module.exports = {
+  authorizationHeader,
   blogsInDb,
   exampleBlog,
   initialBlogs,
+  initUsers,
   nonExistingId,
 };

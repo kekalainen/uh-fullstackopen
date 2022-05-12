@@ -32,9 +32,13 @@ describe('indexing blogs', () => {
 });
 
 describe('creating a blog', () => {
+  let user;
+  beforeEach(async () => (user = await helper.initUsers()));
+
   test('succeeds with valid data', async () => {
     await api
       .post('/api/blogs')
+      .set(helper.authorizationHeader(user))
       .send(helper.exampleBlog)
       .expect(201)
       .expect('Content-Type', /application\/json/);
@@ -49,6 +53,7 @@ describe('creating a blog', () => {
   test('likes property is set to 0 by default', async () => {
     const response = await api
       .post('/api/blogs')
+      .set(helper.authorizationHeader(user))
       .send(helper.exampleBlog)
       .expect(201);
 
@@ -56,7 +61,11 @@ describe('creating a blog', () => {
   });
 
   test('fails with missing properties', () =>
-    api.post('/api/blogs').send({}).expect(400));
+    api
+      .post('/api/blogs')
+      .set(helper.authorizationHeader(user))
+      .send({})
+      .expect(400));
 });
 
 describe('updating a blog', () => {
@@ -89,10 +98,18 @@ describe('updating a blog', () => {
 });
 
 describe('deleting a blog', () => {
+  let user;
+  beforeEach(async () => (user = await helper.initUsers()));
+
   test('succeeds with a valid ID', async () => {
-    const id = (await Blog.findOne({})).id;
-    await api.delete(`/api/blogs/${id}`).expect(204);
-    expect((await helper.blogsInDb()).map((blog) => blog.id)).not.toContain(id);
+    const blog = await Blog.create({ ...helper.exampleBlog, user: user._id });
+
+    await api
+      .delete(`/api/blogs/${blog.id}`)
+      .set(helper.authorizationHeader(user))
+      .expect(204);
+
+    expect((await helper.blogsInDb()).map((b) => b.id)).not.toContain(blog.id);
   });
 });
 
