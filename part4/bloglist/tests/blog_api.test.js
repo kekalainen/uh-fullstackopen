@@ -45,6 +45,15 @@ describe('creating a blog', () => {
       helper.exampleBlog.title
     );
   });
+
+  test('likes property is set to 0 by default', async () => {
+    const response = await api
+      .post('/api/blogs')
+      .send(helper.exampleBlog)
+      .expect(201);
+
+    expect(response.body.likes).toEqual(0);
+  });
 });
 
 afterAll(() => mongoose.connection.close());
