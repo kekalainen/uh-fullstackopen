@@ -23,6 +23,12 @@ describe('indexing blogs', () => {
     const response = await api.get('/api/blogs');
     expect(response.body).toHaveLength(helper.initialBlogs.length);
   });
+
+  test('identifier property is not prefixed with an underscore', async () => {
+    const blog = (await api.get('/api/blogs')).body[0];
+    expect(blog._id).toBeUndefined();
+    expect(blog.id).toBeDefined();
+  });
 });
 
 afterAll(() => mongoose.connection.close());
