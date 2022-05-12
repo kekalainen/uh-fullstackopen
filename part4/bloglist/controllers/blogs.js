@@ -1,5 +1,7 @@
 const express = require('express');
+const jwt = require('jsonwebtoken');
 
+const { JWT_SECRET } = require('../utils/config');
 const Blog = require('../models/blog');
 const User = require('../models/user');
 
@@ -12,8 +14,12 @@ router.get('/', async (_request, response) => {
 
 router.post('/', async (request, response) => {
   const { title, author, url, likes } = request.body;
+  const authPayload = jwt.verify(request.authToken, JWT_SECRET);
 
-  const user = await User.findOne({}); // TODO: associate authenticated user
+  const user = await User.findById(authPayload.id);
+
+  if (user === null)
+    return response.status(401).json({ error: 'auth token user not found' });
 
   const blog = new Blog({ title, author, url, likes, user: user._id });
 
