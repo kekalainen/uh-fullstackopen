@@ -9,8 +9,11 @@ const MONGODB_URI =
 
 const PORT = process.env.PORT || 3003;
 
+const JWT_SECRET = process.env.JWT_SECRET;
+
 module.exports = {
   BCRYPT_SALT_OR_ROUNDS,
+  JWT_SECRET,
   MONGODB_URI,
   PORT,
 };
