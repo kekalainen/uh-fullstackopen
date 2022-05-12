@@ -66,6 +66,9 @@ describe('creating a blog', () => {
       .set(helper.authorizationHeader(user))
       .send({})
       .expect(400));
+
+  test('fails if missing an auth token', () =>
+    api.post('/api/blogs').send(helper.exampleBlog).expect(401));
 });
 
 describe('updating a blog', () => {
