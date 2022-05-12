@@ -7,7 +7,14 @@ const User = require('../models/user');
 const router = express.Router();
 
 router.get('/', async (_request, response) =>
-  response.json(await User.find({}))
+  response.json(
+    await User.find({}).populate('blogs', {
+      title: 1,
+      author: 1,
+      url: 1,
+      likes: 1,
+    })
+  )
 );
 
 router.post('/', async (request, response) => {
