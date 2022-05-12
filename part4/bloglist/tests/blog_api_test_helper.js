@@ -1,5 +1,11 @@
 const Blog = require('../models/blog');
 
+const exampleBlog = {
+  author: 'Example author',
+  title: 'Example title',
+  url: 'https://example.com/blog',
+};
+
 const initialBlogs = [
   {
     title: 'React patterns',
@@ -44,5 +50,6 @@ const blogsInDb = async () =>
 
 module.exports = {
   blogsInDb,
+  exampleBlog,
   initialBlogs,
 };

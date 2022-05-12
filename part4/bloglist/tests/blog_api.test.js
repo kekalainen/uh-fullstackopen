@@ -35,17 +35,15 @@ describe('creating a blog', () => {
   test('succeeds with valid data', async () => {
     await api
       .post('/api/blogs')
-      .send({
-        author: 'Example author',
-        title: 'Example title',
-        url: 'https://example.com/blog',
-      })
+      .send(helper.exampleBlog)
       .expect(201)
       .expect('Content-Type', /application\/json/);
 
     const finalBlogs = await helper.blogsInDb();
     expect(finalBlogs).toHaveLength(helper.initialBlogs.length + 1);
-    expect(finalBlogs.map((blog) => blog.title)).toContain('Example title');
+    expect(finalBlogs.map((blog) => blog.title)).toContain(
+      helper.exampleBlog.title
+    );
   });
 });
 
