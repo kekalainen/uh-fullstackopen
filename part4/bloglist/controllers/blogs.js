@@ -3,7 +3,7 @@ const jwt = require('jsonwebtoken');
 
 const { JWT_SECRET } = require('../utils/config');
 const Blog = require('../models/blog');
-const User = require('../models/user');
+const middleware = require('../utils/middleware');
 
 const router = express.Router();
 
@@ -12,14 +12,9 @@ router.get('/', async (_request, response) => {
   response.json(blogs);
 });
 
-router.post('/', async (request, response) => {
+router.post('/', middleware.authUserExtractor, async (request, response) => {
   const { title, author, url, likes } = request.body;
-  const authPayload = jwt.verify(request.authToken, JWT_SECRET);
-
-  const user = await User.findById(authPayload.id);
-
-  if (user === null)
-    return response.status(401).json({ error: 'auth token user not found' });
+  const user = request.authUser;
 
   const blog = new Blog({ title, author, url, likes, user: user._id });
 
