@@ -54,6 +54,9 @@ describe('creating a blog', () => {
 
     expect(response.body.likes).toEqual(0);
   });
+
+  test('fails with missing properties', () =>
+    api.post('/api/blogs').send({}).expect(400));
 });
 
 afterAll(() => mongoose.connection.close());
