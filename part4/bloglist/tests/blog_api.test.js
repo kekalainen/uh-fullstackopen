@@ -31,4 +31,22 @@ describe('indexing blogs', () => {
   });
 });
 
+describe('creating a blog', () => {
+  test('succeeds with valid data', async () => {
+    await api
+      .post('/api/blogs')
+      .send({
+        author: 'Example author',
+        title: 'Example title',
+        url: 'https://example.com/blog',
+      })
+      .expect(201)
+      .expect('Content-Type', /application\/json/);
+
+    const finalBlogs = await helper.blogsInDb();
+    expect(finalBlogs).toHaveLength(helper.initialBlogs.length + 1);
+    expect(finalBlogs.map((blog) => blog.title)).toContain('Example title');
+  });
+});
+
 afterAll(() => mongoose.connection.close());
