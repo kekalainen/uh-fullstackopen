@@ -4,6 +4,7 @@ const schema = new mongoose.Schema(
   {
     username: {
       type: String,
+      minlength: 3,
       required: true,
     },
     name: {
