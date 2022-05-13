@@ -1,4 +1,5 @@
 import { useState, useEffect } from 'react';
+import axios from 'axios';
 import Blog from './components/Blog';
 import blogService from './services/blogs';
 import LoginForm from './components/LoginForm';
@@ -11,13 +12,15 @@ const App = () => {
     blogService.getAll().then((blogs) => setBlogs(blogs));
   }, []);
 
-  useEffect(
-    () =>
-      user !== null
-        ? localStorage.setItem('auth', JSON.stringify(user))
-        : localStorage.removeItem('auth'),
-    [user]
-  );
+  useEffect(() => {
+    if (user !== null) {
+      localStorage.setItem('auth', JSON.stringify(user));
+      axios.defaults.headers.common['Authorization'] = `Bearer ${user.token}`;
+    } else {
+      localStorage.removeItem('auth');
+      delete axios.defaults.headers.common['Authorization'];
+    }
+  }, [user]);
 
   if (user === null) {
     return (
