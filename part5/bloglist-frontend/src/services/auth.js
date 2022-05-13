@@ -1,14 +1,9 @@
 import axios from 'axios';
 
-const instance = axios.create({ baseURL: '/api/auth' });
-
-instance.interceptors.response.use(
-  (response) => response.data,
-  (error) => Promise.reject(error?.response?.data?.error)
-);
+const config = { baseURL: '/api/auth' };
 
 const login = ({ username, password }) =>
-  instance.post('', { username, password });
+  axios.post('', { username, password }, config);
 
 const authService = { login };
 export default authService;
