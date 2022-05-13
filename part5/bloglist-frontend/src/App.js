@@ -5,11 +5,19 @@ import LoginForm from './components/LoginForm';
 
 const App = () => {
   const [blogs, setBlogs] = useState([]);
-  const [user, setUser] = useState(null);
+  const [user, setUser] = useState(JSON.parse(localStorage.getItem('auth')));
 
   useEffect(() => {
     blogService.getAll().then((blogs) => setBlogs(blogs));
   }, []);
+
+  useEffect(
+    () =>
+      user !== null
+        ? localStorage.setItem('auth', JSON.stringify(user))
+        : localStorage.removeItem('auth'),
+    [user]
+  );
 
   if (user === null) {
     return (
