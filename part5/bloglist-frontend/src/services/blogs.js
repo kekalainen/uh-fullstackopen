@@ -14,5 +14,7 @@ const like = ({ id, title, author, url, likes, user }) =>
     config
   );
 
-const blogService = { create, getAll, like };
+const destroy = (id) => axios.delete(id, config);
+
+const blogService = { create, getAll, like, delete: destroy };
 export default blogService;

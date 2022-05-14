@@ -44,6 +44,14 @@ const App = () => {
     );
   };
 
+  const handleDeleteBlog = async (blog) => {
+    if (!window.confirm(`delete blog "${blog.title}"?`)) return;
+
+    await blogService.delete(blog.id);
+    showNotification(`deleted blog "${blog.title}"`);
+    setBlogs(blogs.filter((old) => old.id !== blog.id));
+  };
+
   const handleLogout = () => {
     setUser(null);
     showNotification('logged out');
@@ -101,7 +109,12 @@ const App = () => {
         .sort((a, b) => b.likes - a.likes)
         .map((blog, index, { length }) => (
           <Fragment key={blog.id}>
-            <Blog blog={blog} onLike={handleLikeBlog} />
+            <Blog
+              blog={blog}
+              user={user}
+              onLike={handleLikeBlog}
+              onDelete={handleDeleteBlog}
+            />
             {index !== length - 1 && <hr />}
           </Fragment>
         ))}
