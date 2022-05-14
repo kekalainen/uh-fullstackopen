@@ -31,6 +31,7 @@ const App = () => {
 
   const handleLikeBlog = async (payload) => {
     const blog = await blogService.like(payload);
+    showNotification(`liked blog "${blog.title}"`);
     setBlogs(
       blogs.map((old) =>
         old.id === blog.id ? { ...old, likes: blog.likes } : old
