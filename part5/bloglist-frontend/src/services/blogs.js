@@ -7,5 +7,12 @@ const create = ({ title, author, url }) =>
 
 const getAll = () => axios.get('', config);
 
-const blogService = { create, getAll };
+const like = ({ id, title, author, url, likes, user }) =>
+  axios.put(
+    id,
+    { title, author, url, likes: likes + 1, user: user.id },
+    config
+  );
+
+const blogService = { create, getAll, like };
 export default blogService;

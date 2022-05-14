@@ -29,6 +29,15 @@ const App = () => {
     setBlogs(blogs.concat(blog));
   };
 
+  const handleLikeBlog = async (payload) => {
+    const blog = await blogService.like(payload);
+    setBlogs(
+      blogs.map((old) =>
+        old.id === blog.id ? { ...old, likes: blog.likes } : old
+      )
+    );
+  };
+
   const handleLogout = () => {
     setUser(null);
     showNotification('logged out');
@@ -84,7 +93,7 @@ const App = () => {
       <h2>browse</h2>
       {blogs.map((blog, index, { length }) => (
         <Fragment key={blog.id}>
-          <Blog blog={blog} />
+          <Blog blog={blog} onLike={handleLikeBlog} />
           {index !== length - 1 && <hr />}
         </Fragment>
       ))}
