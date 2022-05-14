@@ -26,7 +26,12 @@ const App = () => {
   const handleCreateBlog = async (payload) => {
     const blog = await blogService.create(payload);
     blogFormToggalble.current.toggleVisibility();
-    setBlogs(blogs.concat(blog));
+    setBlogs(
+      blogs.concat({
+        ...blog,
+        user: { id: blog.user, username: user.username, name: user.name },
+      })
+    );
   };
 
   const handleLikeBlog = async (payload) => {
