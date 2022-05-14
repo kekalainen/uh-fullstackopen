@@ -1,7 +1,7 @@
 import { useState } from 'react';
 import authService from '../services/auth';
 
-const LoginForm = ({ setUser }) => {
+const LoginForm = ({ setUser, showNotification }) => {
   const [username, setUsername] = useState('');
   const [password, setPassword] = useState('');
 
@@ -12,7 +12,10 @@ const LoginForm = ({ setUser }) => {
       const user = await authService.login({ username, password });
       setUser(user);
       setUsername('');
-    } catch (exception) {}
+      showNotification(`logged in as ${user.name}`);
+    } catch (exception) {
+      showNotification(exception, true);
+    }
 
     setPassword('');
   };

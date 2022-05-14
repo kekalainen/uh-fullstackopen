@@ -2,7 +2,7 @@ import { useState } from 'react';
 import blogService from '../services/blogs';
 import FormInput from './FormInput';
 
-const BlogForm = ({ onCreate }) => {
+const BlogForm = ({ onCreate, showNotification }) => {
   const [title, setTitle] = useState('');
   const [author, setAuthor] = useState('');
   const [url, setUrl] = useState('');
@@ -16,7 +16,10 @@ const BlogForm = ({ onCreate }) => {
       setTitle('');
       setAuthor('');
       setUrl('');
-    } catch (exception) {}
+      showNotification(`added blog "${title}" by "${author}"`);
+    } catch (exception) {
+      showNotification(exception, true);
+    }
   };
 
   return (
