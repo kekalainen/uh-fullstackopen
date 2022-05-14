@@ -91,12 +91,14 @@ const App = () => {
         />
       </Togglable>
       <h2>browse</h2>
-      {blogs.map((blog, index, { length }) => (
-        <Fragment key={blog.id}>
-          <Blog blog={blog} onLike={handleLikeBlog} />
-          {index !== length - 1 && <hr />}
-        </Fragment>
-      ))}
+      {blogs
+        .sort((a, b) => b.likes - a.likes)
+        .map((blog, index, { length }) => (
+          <Fragment key={blog.id}>
+            <Blog blog={blog} onLike={handleLikeBlog} />
+            {index !== length - 1 && <hr />}
+          </Fragment>
+        ))}
     </div>
   );
 };
