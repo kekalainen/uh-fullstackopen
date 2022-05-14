@@ -1,10 +1,11 @@
-import { useState, useEffect } from 'react';
+import { useState, useEffect, useRef } from 'react';
 import axios from 'axios';
 import Blog from './components/Blog';
 import BlogForm from './components/BlogForm';
 import blogService from './services/blogs';
 import LoginForm from './components/LoginForm';
 import Notification from './components/Notification';
+import Togglable from './components/Togglable';
 
 const App = () => {
   const [blogs, setBlogs] = useState([]);
@@ -12,6 +13,7 @@ const App = () => {
   const [notificationMessage, setNotificationMessage] = useState(null);
   const [notificationType, setNotificationType] = useState('');
   const [notificationIndex, setNotificationIndex] = useState(0);
+  const blogFormToggalble = useRef();
 
   const getBlogs = () => blogService.getAll().then((blogs) => setBlogs(blogs));
 
@@ -19,6 +21,11 @@ const App = () => {
     setNotificationMessage(message);
     setNotificationType(!error ? 'success' : 'error');
     setNotificationIndex(notificationIndex + 1);
+  };
+
+  const handleCreateBlog = () => {
+    blogFormToggalble.current.toggleVisibility();
+    getBlogs();
   };
 
   const handleLogout = () => {
@@ -67,7 +74,12 @@ const App = () => {
         <button onClick={handleLogout}>log out</button>
       </p>
       <h2>create</h2>
-      <BlogForm onCreate={getBlogs} showNotification={showNotification} />
+      <Togglable buttonLabel="new blog" ref={blogFormToggalble}>
+        <BlogForm
+          onCreate={handleCreateBlog}
+          showNotification={showNotification}
+        />
+      </Togglable>
       <h2>browse</h2>
       {blogs.map((blog) => (
         <Blog key={blog.id} blog={blog} />
