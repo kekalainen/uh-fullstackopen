@@ -1,4 +1,4 @@
-import { useState, useEffect, useRef } from 'react';
+import { Fragment, useState, useEffect, useRef } from 'react';
 import axios from 'axios';
 import Blog from './components/Blog';
 import BlogForm from './components/BlogForm';
@@ -82,8 +82,11 @@ const App = () => {
         />
       </Togglable>
       <h2>browse</h2>
-      {blogs.map((blog) => (
-        <Blog key={blog.id} blog={blog} />
+      {blogs.map((blog, index, { length }) => (
+        <Fragment key={blog.id}>
+          <Blog blog={blog} />
+          {index !== length - 1 && <hr />}
+        </Fragment>
       ))}
     </div>
   );
