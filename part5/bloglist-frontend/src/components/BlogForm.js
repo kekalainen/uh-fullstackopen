@@ -1,5 +1,4 @@
 import { useState } from 'react';
-import blogService from '../services/blogs';
 import FormInput from './FormInput';
 
 const BlogForm = ({ onCreate, showNotification }) => {
@@ -11,8 +10,7 @@ const BlogForm = ({ onCreate, showNotification }) => {
     event.preventDefault();
 
     try {
-      await blogService.create({ title, author, url });
-      onCreate();
+      await onCreate({ title, author, url });
       setTitle('');
       setAuthor('');
       setUrl('');

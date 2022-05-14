@@ -23,9 +23,10 @@ const App = () => {
     setNotificationIndex(notificationIndex + 1);
   };
 
-  const handleCreateBlog = () => {
+  const handleCreateBlog = async (payload) => {
+    const blog = await blogService.create(payload);
     blogFormToggalble.current.toggleVisibility();
-    getBlogs();
+    setBlogs(blogs.concat(blog));
   };
 
   const handleLogout = () => {
