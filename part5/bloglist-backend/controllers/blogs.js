@@ -26,11 +26,11 @@ router.post('/', middleware.authUserExtractor, async (request, response) => {
 });
 
 router.put('/:id', async (request, response) => {
-  const { title, author, url, likes } = request.body;
+  const { title, author, url, likes, user } = request.body;
 
   const blog = await Blog.findByIdAndUpdate(
     request.params.id,
-    { title, author, url, likes },
+    { title, author, url, likes, user },
     { new: true, runValidators: true, overwrite: true }
   );
 
