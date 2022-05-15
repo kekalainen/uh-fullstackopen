@@ -46,4 +46,15 @@ describe('when expanded', () => {
     expect(screen.queryByText(new RegExp(blog.url))).toBeVisible();
     expect(screen.queryByText(/likes/i)).toBeVisible();
   });
+
+  it('calls the event handler when the like button is pressed', async () => {
+    const likeHandler = jest.fn();
+    const { expandButton, user } = setup({ onLike: likeHandler });
+    await user.click(expandButton);
+
+    const clickCount = 2;
+    const likeButton = screen.getByRole('button', { name: /like/i });
+    for (let i = 0; i < clickCount; i++) await user.click(likeButton);
+    expect(likeHandler.mock.calls).toHaveLength(clickCount);
+  });
 });
