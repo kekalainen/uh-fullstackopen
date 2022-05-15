@@ -18,11 +18,15 @@ const blog = {
   user,
 };
 
-beforeEach(() => {
-  render(<Blog blog={blog} user={user} />);
+const setup = (props) => ({
+  user: userEvent.setup(),
+  ...render(<Blog blog={blog} user={user} {...props} />),
+  expandButton: screen.getByRole('button', { name: /expand/i }),
 });
 
 describe('when collapsed', () => {
+  beforeEach(() => setup());
+
   it('renders the title and author', () => {
     expect(screen.getByText(new RegExp(blog.title))).toBeVisible();
     expect(screen.getByText(new RegExp(blog.author))).toBeVisible();
@@ -35,12 +39,10 @@ describe('when collapsed', () => {
 });
 
 describe('when expanded', () => {
-  beforeEach(async () => {
-    const user = userEvent.setup();
-    await user.click(screen.getByRole('button', { name: /expand/i }));
-  });
+  it('renders the URL and likes', async () => {
+    const { expandButton, user } = setup();
+    await user.click(expandButton);
 
-  it('renders the URL and likes', () => {
     expect(screen.queryByText(new RegExp(blog.url))).toBeVisible();
     expect(screen.queryByText(/likes/i)).toBeVisible();
   });
