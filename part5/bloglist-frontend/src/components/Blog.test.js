@@ -1,6 +1,7 @@
 import '@testing-library/jest-dom/extend-expect';
 import { render, screen } from '@testing-library/react';
 import React from 'react';
+import userEvent from '@testing-library/user-event';
 
 import Blog from './Blog';
 
@@ -30,5 +31,17 @@ describe('when collapsed', () => {
   it('does not render the URL or likes', () => {
     expect(screen.queryByText(new RegExp(blog.url))).not.toBeInTheDocument();
     expect(screen.queryByText(/likes/i)).not.toBeInTheDocument();
+  });
+});
+
+describe('when expanded', () => {
+  beforeEach(async () => {
+    const user = userEvent.setup();
+    await user.click(screen.getByRole('button', { name: /expand/i }));
+  });
+
+  it('renders the URL and likes', () => {
+    expect(screen.queryByText(new RegExp(blog.url))).toBeVisible();
+    expect(screen.queryByText(/likes/i)).toBeVisible();
   });
 });
