@@ -63,5 +63,24 @@ describe('Blog app', function () {
 
       cy.contains(':not(.notification)', blog.title);
     });
+
+    context('and a blog exists', function () {
+      beforeEach(function () {
+        cy.requestWithAuth({
+          method: 'POST',
+          url: `${apiBaseUrl}/blogs`,
+          body: blog,
+        }).then(() => cy.visit(baseUrl));
+      });
+
+      it('can like a blog', function () {
+        cy.contains('button', /expand/i).click();
+        cy.contains(/likes 0/i);
+
+        cy.contains('button', /like/i).click();
+        cy.get('.notification').contains(/like/i);
+        cy.contains(/likes 1/i);
+      });
+    });
   });
 });
