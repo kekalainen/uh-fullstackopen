@@ -45,10 +45,8 @@ describe('Blog app', function () {
 
   context('when logged in', function () {
     beforeEach(function () {
-      cy.request('POST', `${apiBaseUrl}/auth`, user).then((response) => {
-        localStorage.setItem('auth', JSON.stringify(response.body));
-        cy.visit(baseUrl);
-      });
+      cy.login(user);
+      cy.visit(baseUrl);
     });
 
     it('can create a new blog', function () {
