@@ -81,6 +81,12 @@ describe('Blog app', function () {
         cy.get('.notification').contains(/like/i);
         cy.contains(/likes 1/i);
       });
+
+      it('can delete a blog they created', function () {
+        cy.contains('button', /expand/i).click();
+        cy.contains('button', /delete/i).click();
+        cy.get('.notification').contains(/deleted/i);
+      });
     });
   });
 });
