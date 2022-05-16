@@ -7,6 +7,12 @@ const user = {
   password: 'hunter2',
 };
 
+const blog = {
+  author: 'Example author',
+  title: 'Example title',
+  url: 'https://example.com/blog',
+};
+
 const attemptLogin = ({ username, password }) => {
   cy.get('input[name="username"]').type(username);
   cy.get('input[name="password"]').type(password);
@@ -34,6 +40,28 @@ describe('Blog app', function () {
     it('fails with invalid credentials', function () {
       attemptLogin({ username: 'invalid', password: 'invalid' });
       cy.get('.notification.error').contains(/invalid/i);
+    });
+  });
+
+  context('when logged in', function () {
+    beforeEach(function () {
+      cy.request('POST', `${apiBaseUrl}/auth`, user).then((response) => {
+        localStorage.setItem('auth', JSON.stringify(response.body));
+        cy.visit(baseUrl);
+      });
+    });
+
+    it('can create a new blog', function () {
+      cy.contains('button', /new blog/i).click();
+
+      cy.contains('label', /title/i).children('input').type(blog.title);
+      cy.contains('label', /author/i)
+        .children('input')
+        .type(blog.author);
+      cy.contains('label', /url/i).children('input').type(blog.url);
+      cy.contains('button[type="submit"]', /create/i).click();
+
+      cy.contains(':not(.notification)', blog.title);
     });
   });
 });
