@@ -1,3 +1,6 @@
+const apiBaseUrl = 'http://localhost:3003/api',
+  baseUrl = 'http://localhost:3000';
+
 const user = {
   name: 'Tester',
   username: 'tester',
@@ -12,9 +15,9 @@ const attemptLogin = ({ username, password }) => {
 
 describe('Blog app', function () {
   beforeEach(function () {
-    cy.request('POST', 'http://localhost:3003/api/testing/reset');
-    cy.request('POST', 'http://localhost:3000/api/users', user);
-    cy.visit('http://localhost:3000');
+    cy.request('POST', `${apiBaseUrl}/testing/reset`);
+    cy.request('POST', `${apiBaseUrl}/users`, user);
+    cy.visit(baseUrl);
   });
 
   it('shows the login form', function () {
