@@ -24,6 +24,8 @@ const reducer = (state = initialState, action) => {
   console.log('action', action);
 
   switch (action.type) {
+    case 'CREATE_ANECDOTE':
+      return state.concat(asObject(action.data.content));
     case 'VOTE_ANECDOTE':
       return state.map((anecdote) =>
         anecdote.id !== action.data.id
@@ -34,6 +36,11 @@ const reducer = (state = initialState, action) => {
       return state;
   }
 };
+
+export const createAnecdote = (content) => ({
+  type: 'CREATE_ANECDOTE',
+  data: { content },
+});
 
 export const voteAnecdote = (id) => ({ type: 'VOTE_ANECDOTE', data: { id } });
 
