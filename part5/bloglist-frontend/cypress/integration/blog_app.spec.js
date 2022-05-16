@@ -62,6 +62,39 @@ describe('Blog app', function () {
       cy.contains(':not(.notification)', blog.title);
     });
 
+    it('orders blogs by likes', function () {
+      const blogs = [22, 13, 15, 25, 62].map((likes) => ({ ...blog, likes }));
+
+      blogs.forEach((blog) =>
+        cy.requestWithAuth({
+          method: 'POST',
+          url: `${apiBaseUrl}/blogs`,
+          body: blog,
+        })
+      );
+
+      cy.visit(baseUrl);
+
+      cy.contains(/browse/i)
+        .nextUntil()
+        .children()
+        .find('button', /expand/i)
+        .each(($btn) => $btn.click());
+
+      blogs
+        .sort((a, b) => b.likes - a.likes)
+        .forEach((blog, index, blogs) => {
+          if (index === blogs.length - 1) return;
+          const nextLikes = blogs[index + 1].likes;
+
+          cy.contains(new RegExp(`likes ${blog.likes}`, 'i'))
+            .parent()
+            .nextUntil('div', nextLikes)
+            .next()
+            .contains(new RegExp(`likes ${nextLikes}`, 'i'));
+        });
+    });
+
     context('and a blog exists', function () {
       beforeEach(function () {
         cy.requestWithAuth({
