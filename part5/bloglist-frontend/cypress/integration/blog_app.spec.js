@@ -85,6 +85,31 @@ describe('Blog app', function () {
         cy.contains('button', /delete/i).click();
         cy.get('.notification').contains(/deleted/i);
       });
+
+      it('cannot delete a blog someone else created', function () {
+        const anotherUser = { ...user, username: 'tester2' };
+        cy.request('POST', `${apiBaseUrl}/users`, anotherUser);
+        cy.login(anotherUser);
+        cy.visit(baseUrl);
+
+        cy.contains('button', /expand/i).click();
+        cy.contains('button', /delete/i).should('not.exist');
+
+        cy.requestWithAuth({
+          method: 'POST',
+          url: `${apiBaseUrl}/blogs`,
+          body: blog,
+        }).then((response) => {
+          cy.login(user);
+          cy.requestWithAuth({
+            method: 'DELETE',
+            url: `${apiBaseUrl}/blogs/${response.body.id}`,
+            failOnStatusCode: false,
+          })
+            .its('status')
+            .should('equal', 403);
+        });
+      });
     });
   });
 });
