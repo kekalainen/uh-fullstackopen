@@ -3,6 +3,7 @@ module.exports = {
   env: {
     browser: true,
     es6: true,
+    'cypress/globals': true,
     'jest/globals': true,
   },
   extends: ['eslint:recommended', 'plugin:react/recommended'],
@@ -13,7 +14,7 @@ module.exports = {
     ecmaVersion: 2021,
     sourceType: 'module',
   },
-  plugins: ['react', 'jest'],
+  plugins: ['react', 'cypress', 'jest'],
   rules: {
     indent: ['error', 2],
     quotes: ['error', 'single'],

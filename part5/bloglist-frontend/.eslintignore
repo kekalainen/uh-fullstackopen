@@ -1,1 +1,4 @@
 build
+cypress/fixtures
+cypress/plugins
+cypress/support
