@@ -14,11 +14,16 @@ const notificationSlice = createSlice({
 });
 
 let timeoutId;
-export const showTimedNotification = (dispatch, content, timeout = 5000) => {
-  clearTimeout(timeoutId);
-  dispatch(showNotification(content));
-  timeoutId = setTimeout(() => dispatch(removeNotification()), timeout);
-};
+export const showTimedNotification =
+  (content, timeout = 5) =>
+  (dispatch) => {
+    clearTimeout(timeoutId);
+    dispatch(showNotification(content));
+    timeoutId = setTimeout(
+      () => dispatch(removeNotification()),
+      timeout * 1000
+    );
+  };
 
 export const { showNotification, removeNotification } =
   notificationSlice.actions;

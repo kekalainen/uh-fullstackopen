@@ -15,11 +15,12 @@ const AnecdoteList = () => {
 
   const vote = (id) => {
     dispatch(voteAnecdote(id));
-    showTimedNotification(
-      dispatch,
-      `voted anecdote "${
-        anecdotes.find((anecdote) => anecdote.id === id).content
-      }"`
+    dispatch(
+      showTimedNotification(
+        `voted anecdote "${
+          anecdotes.find((anecdote) => anecdote.id === id).content
+        }"`
+      )
     );
   };
 
