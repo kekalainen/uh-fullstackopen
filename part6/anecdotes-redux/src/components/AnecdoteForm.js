@@ -1,16 +1,14 @@
-import { useDispatch } from 'react-redux';
+import { connect } from 'react-redux';
 import { createAnecdote } from '../reducers/anecdoteReducer';
 import { showTimedNotification } from '../reducers/notificationReducer';
 
-const AnecdoteForm = () => {
-  const dispatch = useDispatch();
-
+const AnecdoteForm = ({ createAnecdote }) => {
   const handleSubmit = async (event) => {
     event.preventDefault();
     const content = event.target.anecdote.value;
     event.target.anecdote.value = '';
-    dispatch(createAnecdote(content));
-    dispatch(showTimedNotification(`created anecdote "${content}"`));
+    createAnecdote(content);
+    showTimedNotification(`created anecdote "${content}"`);
   };
 
   return (
@@ -23,4 +21,6 @@ const AnecdoteForm = () => {
   );
 };
 
-export default AnecdoteForm;
+export default connect(null, { createAnecdote, showTimedNotification })(
+  AnecdoteForm
+);
