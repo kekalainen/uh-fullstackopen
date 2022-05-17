@@ -9,10 +9,11 @@ const anecdoteSlice = createSlice({
       state.push(anecdote);
     },
     voteAnecdote(state, { payload: id }) {
+      const votes = state.find((anecdote) => anecdote.id === id).votes + 1;
+      anecdoteService.setVotes(id, votes);
+
       return state.map((anecdote) =>
-        anecdote.id !== id
-          ? anecdote
-          : { ...anecdote, votes: anecdote.votes + 1 }
+        anecdote.id !== id ? anecdote : { ...anecdote, votes }
       );
     },
     setAnecdotes(_state, { payload }) {

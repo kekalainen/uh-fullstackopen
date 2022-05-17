@@ -6,5 +6,7 @@ const create = (content) => axios.post('', { content, votes: 0 }, config);
 
 const getAll = () => axios.get('', config);
 
-const anecdoteService = { create, getAll };
+const setVotes = (id, votes) => axios.patch(id, { votes }, config);
+
+const anecdoteService = { create, getAll, setVotes };
 export default anecdoteService;
