@@ -1,5 +1,5 @@
 import { useState } from 'react';
-import { BrowserRouter as Router, Routes, Route } from 'react-router-dom';
+import { Routes, Route } from 'react-router-dom';
 import About from './components/About';
 import AnecdoteList from './components/AnecdoteList';
 import CreateNew from './components/CreateNew';
@@ -45,7 +45,7 @@ const App = () => {
   };
 
   return (
-    <Router>
+    <>
       <h1>Software anecdotes</h1>
       <Menu />
       <Routes>
@@ -54,7 +54,7 @@ const App = () => {
         <Route path="/about" element={<About />} />
       </Routes>
       <Footer />
-    </Router>
+    </>
   );
 };
 
