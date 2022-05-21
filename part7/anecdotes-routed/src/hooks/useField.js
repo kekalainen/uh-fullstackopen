@@ -7,9 +7,12 @@ const useField = (type) => {
   const reset = () => setValue('');
 
   return {
-    type,
+    props: {
+      type,
+      value,
+      onChange,
+    },
     value,
-    onChange,
     reset,
   };
 };
