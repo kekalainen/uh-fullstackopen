@@ -1,4 +1,7 @@
 {
+  "editor.defaultFormatter": "esbenp.prettier-vscode",
+  "editor.formatOnSave": true,
+  "prettier.singleQuote": true,
   "rest-client.environmentVariables": {
     "local": {
       "baseUrl": "http://localhost:3001"
