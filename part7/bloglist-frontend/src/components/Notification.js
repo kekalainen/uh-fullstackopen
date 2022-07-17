@@ -1,29 +1,12 @@
-import { useState, useEffect, useRef } from 'react';
-import PropTypes from 'prop-types';
+import { useSelector } from 'react-redux';
 
-const Notification = ({ message, type, index }) => {
-  const [visible, setVisible] = useState(false);
-  const timeoutId = useRef(null);
+const Notification = () => {
+  const notification = useSelector(({ notification }) => notification);
 
-  useEffect(() => {
-    if (message !== null) {
-      clearTimeout(timeoutId.current);
-      setVisible(true);
-      timeoutId.current = setTimeout(() => setVisible(false), 5000);
-    }
-
-    return () => clearTimeout(timeoutId.current);
-  }, [message, index]);
-
-  if (!visible) return null;
+  if (notification === null) return null;
+  const { type, message } = notification;
 
   return <div className={`notification ${type}`}>{message}</div>;
-};
-
-Notification.propTypes = {
-  message: PropTypes.string,
-  type: PropTypes.string.isRequired,
-  index: PropTypes.number.isRequired,
 };
 
 export default Notification;

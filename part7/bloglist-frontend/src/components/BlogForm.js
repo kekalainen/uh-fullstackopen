@@ -1,7 +1,10 @@
 import { useState } from 'react';
+import { useDispatch } from 'react-redux';
 import FormInput from './FormInput';
+import { showTimedNotification } from '../slices/notification';
 
-const BlogForm = ({ onCreate, showNotification }) => {
+const BlogForm = ({ onCreate }) => {
+  const dispatch = useDispatch();
   const [title, setTitle] = useState('');
   const [author, setAuthor] = useState('');
   const [url, setUrl] = useState('');
@@ -14,9 +17,9 @@ const BlogForm = ({ onCreate, showNotification }) => {
       setTitle('');
       setAuthor('');
       setUrl('');
-      showNotification(`added blog "${title}" by "${author}"`);
+      dispatch(showTimedNotification(`added blog "${title}" by "${author}"`));
     } catch (exception) {
-      showNotification(exception, true);
+      dispatch(showTimedNotification(exception, true));
     }
   };
 

@@ -1,7 +1,10 @@
 import { useState } from 'react';
+import { useDispatch } from 'react-redux';
 import authService from '../services/auth';
+import { showTimedNotification } from '../slices/notification';
 
-const LoginForm = ({ setUser, showNotification }) => {
+const LoginForm = ({ setUser }) => {
+  const dispatch = useDispatch();
   const [username, setUsername] = useState('');
   const [password, setPassword] = useState('');
 
@@ -12,9 +15,9 @@ const LoginForm = ({ setUser, showNotification }) => {
       const user = await authService.login({ username, password });
       setUser(user);
       setUsername('');
-      showNotification(`logged in as ${user.name}`);
+      dispatch(showTimedNotification(`logged in as ${user.name}`));
     } catch (exception) {
-      showNotification(exception, true);
+      dispatch(showTimedNotification(exception, true));
     }
 
     setPassword('');
