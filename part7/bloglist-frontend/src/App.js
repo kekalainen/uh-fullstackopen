@@ -1,49 +1,23 @@
 import { Fragment, useState, useEffect, useRef } from 'react';
-import { useDispatch } from 'react-redux';
+import { useDispatch, useSelector } from 'react-redux';
 import axios from 'axios';
 import Blog from './components/Blog';
 import BlogForm from './components/BlogForm';
-import blogService from './services/blogs';
 import LoginForm from './components/LoginForm';
 import Notification from './components/Notification';
 import Togglable from './components/Togglable';
 import { showTimedNotification } from './slices/notification';
+import { createBlog, initializeBlogs } from './slices/blog';
 
 const App = () => {
   const dispatch = useDispatch();
-  const [blogs, setBlogs] = useState([]);
+  const blogs = useSelector(({ blogs }) => blogs);
   const [user, setUser] = useState(JSON.parse(localStorage.getItem('auth')));
   const blogFormToggalble = useRef();
 
-  const getBlogs = () => blogService.getAll().then((blogs) => setBlogs(blogs));
-
-  const handleCreateBlog = async (payload) => {
-    const blog = await blogService.create(payload);
+  const handleCreateBlog = (payload) => {
     blogFormToggalble.current.toggleVisibility();
-    setBlogs(
-      blogs.concat({
-        ...blog,
-        user: { id: blog.user, username: user.username, name: user.name },
-      })
-    );
-  };
-
-  const handleLikeBlog = async (payload) => {
-    const blog = await blogService.like(payload);
-    dispatch(showTimedNotification(`liked blog "${blog.title}"`));
-    setBlogs(
-      blogs.map((old) =>
-        old.id === blog.id ? { ...old, likes: blog.likes } : old
-      )
-    );
-  };
-
-  const handleDeleteBlog = async (blog) => {
-    if (!window.confirm(`delete blog "${blog.title}"?`)) return;
-
-    await blogService.delete(blog.id);
-    dispatch(showTimedNotification(`deleted blog "${blog.title}"`));
-    setBlogs(blogs.filter((old) => old.id !== blog.id));
+    dispatch(createBlog(payload, user));
   };
 
   const handleLogout = () => {
@@ -52,7 +26,7 @@ const App = () => {
   };
 
   useEffect(() => {
-    getBlogs();
+    dispatch(initializeBlogs());
   }, []);
 
   useEffect(() => {
@@ -89,15 +63,11 @@ const App = () => {
       </Togglable>
       <h2>browse</h2>
       {blogs
+        .slice()
         .sort((a, b) => b.likes - a.likes)
         .map((blog, index, { length }) => (
           <Fragment key={blog.id}>
-            <Blog
-              blog={blog}
-              user={user}
-              onLike={handleLikeBlog}
-              onDelete={handleDeleteBlog}
-            />
+            <Blog blog={blog} user={user} />
             {index !== length - 1 && <hr />}
           </Fragment>
         ))}

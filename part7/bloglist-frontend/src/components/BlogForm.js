@@ -9,11 +9,11 @@ const BlogForm = ({ onCreate }) => {
   const [author, setAuthor] = useState('');
   const [url, setUrl] = useState('');
 
-  const handleSubmit = async (event) => {
+  const handleSubmit = (event) => {
     event.preventDefault();
 
     try {
-      await onCreate({ title, author, url });
+      onCreate({ title, author, url });
       setTitle('');
       setAuthor('');
       setUrl('');
