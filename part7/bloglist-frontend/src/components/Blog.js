@@ -1,5 +1,6 @@
 import { useState } from 'react';
 import { useDispatch } from 'react-redux';
+import { deleteBlog, likeBlog } from '../slices/blog';
 import { showTimedNotification } from '../slices/notification';
 
 const Blog = ({ blog, user }) => {
@@ -7,14 +8,14 @@ const Blog = ({ blog, user }) => {
   const [expanded, setExpanded] = useState(false);
 
   const handleLike = () => {
-    // TOOD: reimplement.
+    dispatch(likeBlog(blog));
     dispatch(showTimedNotification(`liked blog "${blog.title}"`));
   };
 
   const handleDelete = () => {
     if (!window.confirm(`delete blog "${blog.title}"?`)) return;
 
-    // TOOD: reimplement.
+    dispatch(deleteBlog(blog));
     dispatch(showTimedNotification(`deleted blog "${blog.title}"`));
   };
 

@@ -25,5 +25,21 @@ export const createBlog = (payload, user) => async (dispatch) => {
   );
 };
 
+export const likeBlog = (payload) => async (dispatch, getState) => {
+  const { id, likes } = await blogService.like(payload);
+  const { blogs } = getState();
+  dispatch(
+    setBlogs(blogs.map((blog) => (blog.id === id ? { ...blog, likes } : blog)))
+  );
+};
+
+export const deleteBlog = ({ id }) => {
+  return async (dispatch, getState) => {
+    await blogService.delete(id);
+    const { blogs } = getState();
+    dispatch(setBlogs(blogs.filter((blog) => blog.id !== id)));
+  };
+};
+
 export const { appendBlog, setBlogs } = blogSlice.actions;
 export default blogSlice.reducer;
