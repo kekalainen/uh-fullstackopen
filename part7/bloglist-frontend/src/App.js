@@ -1,18 +1,18 @@
-import { Fragment, useState, useEffect, useRef } from 'react';
+import { Fragment, useEffect, useRef } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
-import axios from 'axios';
 import Blog from './components/Blog';
 import BlogForm from './components/BlogForm';
 import LoginForm from './components/LoginForm';
 import Notification from './components/Notification';
 import Togglable from './components/Togglable';
+import { logout } from './slices/auth';
 import { showTimedNotification } from './slices/notification';
 import { createBlog, initializeBlogs } from './slices/blog';
 
 const App = () => {
   const dispatch = useDispatch();
+  const user = useSelector(({ auth }) => auth);
   const blogs = useSelector(({ blogs }) => blogs);
-  const [user, setUser] = useState(JSON.parse(localStorage.getItem('auth')));
   const blogFormToggalble = useRef();
 
   const handleCreateBlog = (payload) => {
@@ -21,7 +21,7 @@ const App = () => {
   };
 
   const handleLogout = () => {
-    setUser(null);
+    dispatch(logout());
     dispatch(showTimedNotification('logged out'));
   };
 
@@ -29,22 +29,12 @@ const App = () => {
     dispatch(initializeBlogs());
   }, []);
 
-  useEffect(() => {
-    if (user !== null) {
-      localStorage.setItem('auth', JSON.stringify(user));
-      axios.defaults.headers.common['Authorization'] = `Bearer ${user.token}`;
-    } else {
-      localStorage.removeItem('auth');
-      delete axios.defaults.headers.common['Authorization'];
-    }
-  }, [user]);
-
   if (user === null) {
     return (
       <div>
         <h2>log in</h2>
         <Notification />
-        <LoginForm setUser={setUser} />
+        <LoginForm />
       </div>
     );
   }
