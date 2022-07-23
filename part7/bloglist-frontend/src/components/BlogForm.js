@@ -1,10 +1,12 @@
 import { useState } from 'react';
-import { useDispatch } from 'react-redux';
+import { useDispatch, useSelector } from 'react-redux';
 import FormInput from './FormInput';
+import { createBlog } from '../slices/blog';
 import { showTimedNotification } from '../slices/notification';
 
 const BlogForm = ({ onCreate }) => {
   const dispatch = useDispatch();
+  const user = useSelector(({ auth }) => auth);
   const [title, setTitle] = useState('');
   const [author, setAuthor] = useState('');
   const [url, setUrl] = useState('');
@@ -13,7 +15,9 @@ const BlogForm = ({ onCreate }) => {
     event.preventDefault();
 
     try {
-      onCreate({ title, author, url });
+      const blog = { title, author, url, user };
+      dispatch(createBlog(blog));
+      onCreate(blog);
       setTitle('');
       setAuthor('');
       setUrl('');

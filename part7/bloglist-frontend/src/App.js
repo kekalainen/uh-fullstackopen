@@ -7,7 +7,7 @@ import Notification from './components/Notification';
 import Togglable from './components/Togglable';
 import { logout } from './slices/auth';
 import { showTimedNotification } from './slices/notification';
-import { createBlog, initializeBlogs } from './slices/blog';
+import { initializeBlogs } from './slices/blog';
 
 const App = () => {
   const dispatch = useDispatch();
@@ -15,10 +15,7 @@ const App = () => {
   const blogs = useSelector(({ blogs }) => blogs);
   const blogFormToggalble = useRef();
 
-  const handleCreateBlog = (payload) => {
-    blogFormToggalble.current.toggleVisibility();
-    dispatch(createBlog(payload, user));
-  };
+  const handleCreateBlog = () => blogFormToggalble.current.toggleVisibility();
 
   const handleLogout = () => {
     dispatch(logout());

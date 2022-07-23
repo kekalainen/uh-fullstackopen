@@ -15,14 +15,16 @@ export const initializeBlogs = () => async (dispatch) => {
   dispatch(setBlogs(blogs));
 };
 
-export const createBlog = (payload, user) => async (dispatch) => {
-  const blog = await blogService.create(payload);
-  dispatch(
-    appendBlog({
-      ...blog,
-      user: { id: blog.user, username: user.username, name: user.name },
-    })
-  );
+export const createBlog = ({ title, author, url, user }) => {
+  return async (dispatch) => {
+    const blog = await blogService.create({ title, author, url });
+    dispatch(
+      appendBlog({
+        ...blog,
+        user: { id: blog.user, username: user.username, name: user.name },
+      })
+    );
+  };
 };
 
 export const likeBlog = (payload) => async (dispatch, getState) => {
