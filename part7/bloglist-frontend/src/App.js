@@ -1,21 +1,16 @@
-import { Fragment, useEffect, useRef } from 'react';
+import { useEffect } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
-import Blog from './components/Blog';
-import BlogForm from './components/BlogForm';
 import LoginForm from './components/LoginForm';
 import Notification from './components/Notification';
-import Togglable from './components/Togglable';
 import { logout } from './slices/auth';
 import { showTimedNotification } from './slices/notification';
 import { initializeBlogs } from './slices/blog';
+import { Routes, Route } from 'react-router-dom';
+import Blogs from './components/Blogs';
 
 const App = () => {
   const dispatch = useDispatch();
   const user = useSelector(({ auth }) => auth);
-  const blogs = useSelector(({ blogs }) => blogs);
-  const blogFormToggalble = useRef();
-
-  const handleCreateBlog = () => blogFormToggalble.current.toggleVisibility();
 
   const handleLogout = () => {
     dispatch(logout());
@@ -44,20 +39,9 @@ const App = () => {
         hello, {user.name} 👋
         <button onClick={handleLogout}>log out</button>
       </p>
-      <h2>create</h2>
-      <Togglable buttonLabel="new blog" ref={blogFormToggalble}>
-        <BlogForm onCreate={handleCreateBlog} />
-      </Togglable>
-      <h2>browse</h2>
-      {blogs
-        .slice()
-        .sort((a, b) => b.likes - a.likes)
-        .map((blog, index, { length }) => (
-          <Fragment key={blog.id}>
-            <Blog blog={blog} user={user} />
-            {index !== length - 1 && <hr />}
-          </Fragment>
-        ))}
+      <Routes>
+        <Route path="/" element={<Blogs />}></Route>
+      </Routes>
     </div>
   );
 };
