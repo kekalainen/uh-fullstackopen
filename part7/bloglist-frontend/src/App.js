@@ -7,6 +7,7 @@ import { showTimedNotification } from './slices/notification';
 import { initializeBlogs } from './slices/blog';
 import { Routes, Route } from 'react-router-dom';
 import Blogs from './components/Blogs';
+import Users from './components/Users';
 
 const App = () => {
   const dispatch = useDispatch();
@@ -41,6 +42,7 @@ const App = () => {
       </p>
       <Routes>
         <Route path="/" element={<Blogs />}></Route>
+        <Route path="/users" element={<Users />}></Route>
       </Routes>
     </div>
   );
