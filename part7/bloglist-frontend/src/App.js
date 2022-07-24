@@ -7,6 +7,7 @@ import { showTimedNotification } from './slices/notification';
 import { initializeBlogs } from './slices/blog';
 import { Routes, Route } from 'react-router-dom';
 import Blogs from './components/Blogs';
+import User from './components/User';
 import Users from './components/Users';
 
 const App = () => {
@@ -43,6 +44,7 @@ const App = () => {
       <Routes>
         <Route path="/" element={<Blogs />}></Route>
         <Route path="/users" element={<Users />}></Route>
+        <Route path="/users/:id" element={<User />}></Route>
       </Routes>
     </div>
   );
