@@ -1,4 +1,3 @@
-import { useState } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
 import { useNavigate, useParams } from 'react-router-dom';
 import { deleteBlog, likeBlog } from '../slices/blog';
@@ -10,7 +9,6 @@ const Blog = () => {
   const auth = useSelector(({ auth }) => auth);
   const dispatch = useDispatch();
   const navigate = useNavigate();
-  const [expanded, setExpanded] = useState(false);
 
   if (!blog) return null;
 
@@ -29,25 +27,18 @@ const Blog = () => {
 
   return (
     <div>
+      <h2>
+        {blog.title} {blog.author}
+      </h2>
+      <a target="_blank" rel="noreferrer" href={blog.url}>
+        {blog.url}
+      </a>
       <div>
-        {blog.title} {blog.author}{' '}
-        <button onClick={() => setExpanded(!expanded)}>
-          {expanded ? 'collapse' : 'expand'}
-        </button>
+        {blog.likes} likes <button onClick={handleLike}>like</button>
       </div>
-      {expanded && (
-        <>
-          <a target="_blank" rel="noreferrer" href={blog.url}>
-            {blog.url}
-          </a>
-          <div>
-            likes {blog.likes} <button onClick={handleLike}>like</button>
-          </div>
-          <div>{blog.user.name}</div>
-          {blog.user.username === auth.username && (
-            <button onClick={handleDelete}>delete</button>
-          )}
-        </>
+      <p>added by {blog.user.name}</p>
+      {blog.user.username === auth.username && (
+        <button onClick={handleDelete}>delete</button>
       )}
     </div>
   );
