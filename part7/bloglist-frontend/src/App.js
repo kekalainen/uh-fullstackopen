@@ -6,6 +6,7 @@ import { logout } from './slices/auth';
 import { showTimedNotification } from './slices/notification';
 import { initializeBlogs } from './slices/blog';
 import { Routes, Route } from 'react-router-dom';
+import Blog from './components/Blog';
 import Blogs from './components/Blogs';
 import User from './components/User';
 import Users from './components/Users';
@@ -43,6 +44,7 @@ const App = () => {
       </p>
       <Routes>
         <Route path="/" element={<Blogs />}></Route>
+        <Route path="/blogs/:id" element={<Blog />}></Route>
         <Route path="/users" element={<Users />}></Route>
         <Route path="/users/:id" element={<User />}></Route>
       </Routes>

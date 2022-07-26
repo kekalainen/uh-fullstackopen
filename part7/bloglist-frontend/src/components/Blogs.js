@@ -1,11 +1,10 @@
 import { Fragment, useRef } from 'react';
 import { useSelector } from 'react-redux';
-import Blog from './Blog';
+import { Link } from 'react-router-dom';
 import BlogForm from './BlogForm';
 import Togglable from './Togglable';
 
 const Blogs = () => {
-  const user = useSelector(({ auth }) => auth);
   const blogs = useSelector(({ blogs }) => blogs);
   const blogFormToggalble = useRef();
 
@@ -23,7 +22,7 @@ const Blogs = () => {
         .sort((a, b) => b.likes - a.likes)
         .map((blog, index, { length }) => (
           <Fragment key={blog.id}>
-            <Blog blog={blog} user={user} />
+            <Link to={`/blogs/${blog.id}`}>{blog.title}</Link>
             {index !== length - 1 && <hr />}
           </Fragment>
         ))}
