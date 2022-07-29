@@ -26,11 +26,11 @@ router.post('/', middleware.authUserExtractor, async (request, response) => {
 });
 
 router.put('/:id', async (request, response) => {
-  const { title, author, url, likes, user } = request.body;
+  const { title, author, url, likes, user, comments } = request.body;
 
   const blog = await Blog.findByIdAndUpdate(
     request.params.id,
-    { title, author, url, likes, user },
+    { title, author, url, likes, user, comments },
     { new: true, runValidators: true, overwrite: true }
   );
 
@@ -50,5 +50,21 @@ router.delete('/:id', async (request, response) => {
   await blog.remove();
   response.status(204).end();
 });
+
+router.post(
+  '/:id/comments',
+  middleware.authUserExtractor,
+  async (request, response) => {
+    const { content } = request.body;
+
+    await Blog.findByIdAndUpdate(
+      request.params.id,
+      { $push: { comments: content } },
+      { runValidators: true }
+    );
+
+    response.status(204).end();
+  }
+);
 
 module.exports = router;
