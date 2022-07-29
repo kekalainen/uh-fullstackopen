@@ -35,6 +35,22 @@ export const likeBlog = (payload) => async (dispatch, getState) => {
   );
 };
 
+export const createBlogComment = ({ id, content }) => {
+  return async (dispatch, getState) => {
+    await blogService.createComment({ id, content });
+    const { blogs } = getState();
+    dispatch(
+      setBlogs(
+        blogs.map((blog) =>
+          blog.id === id
+            ? { ...blog, comments: blog.comments.concat(content) }
+            : blog
+        )
+      )
+    );
+  };
+};
+
 export const deleteBlog = ({ id }) => {
   return async (dispatch, getState) => {
     await blogService.delete(id);

@@ -14,7 +14,10 @@ const like = ({ id, title, author, url, likes, user, comments }) =>
     config
   );
 
+const createComment = ({ id, content }) =>
+  axios.post(`${id}/comments`, { content }, config);
+
 const destroy = (id) => axios.delete(id, config);
 
-const blogService = { create, getAll, like, delete: destroy };
+const blogService = { create, getAll, like, createComment, delete: destroy };
 export default blogService;
