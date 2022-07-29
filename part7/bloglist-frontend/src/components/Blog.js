@@ -2,6 +2,7 @@ import { useDispatch, useSelector } from 'react-redux';
 import { useNavigate, useParams } from 'react-router-dom';
 import { deleteBlog, likeBlog } from '../slices/blog';
 import { showTimedNotification } from '../slices/notification';
+import BlogComments from './BlogComments';
 
 const Blog = () => {
   const { id } = useParams();
@@ -40,6 +41,7 @@ const Blog = () => {
       {blog.user.username === auth.username && (
         <button onClick={handleDelete}>delete</button>
       )}
+      <BlogComments />
     </div>
   );
 };

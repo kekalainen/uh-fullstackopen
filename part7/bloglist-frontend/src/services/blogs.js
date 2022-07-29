@@ -7,10 +7,10 @@ const create = ({ title, author, url }) =>
 
 const getAll = () => axios.get('', config);
 
-const like = ({ id, title, author, url, likes, user }) =>
+const like = ({ id, title, author, url, likes, user, comments }) =>
   axios.put(
     id,
-    { title, author, url, likes: likes + 1, user: user.id || user },
+    { title, author, url, likes: likes + 1, user: user.id || user, comments },
     config
   );
 
