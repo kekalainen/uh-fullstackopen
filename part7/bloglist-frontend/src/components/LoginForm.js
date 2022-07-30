@@ -2,6 +2,8 @@ import { useState } from 'react';
 import { useDispatch } from 'react-redux';
 import { login } from '../slices/auth';
 import { showTimedNotification } from '../slices/notification';
+import Button from './Button';
+import FormInput from './FormInput';
 
 const LoginForm = () => {
   const dispatch = useDispatch();
@@ -23,30 +25,28 @@ const LoginForm = () => {
   };
 
   return (
-    <form onSubmit={handleLogin}>
-      <label>
-        username
-        <input
+    <form className="flex flex-col gap-4" onSubmit={handleLogin}>
+      <div className="flex gap-2">
+        <FormInput
           name="username"
+          label="username"
           type="text"
           required
           value={username}
           onChange={({ target }) => setUsername(target.value)}
         />
-      </label>
-      <br />
-      <label>
-        password
-        <input
+        <FormInput
           name="password"
+          label="password"
           type="password"
           required
           value={password}
           onChange={({ target }) => setPassword(target.value)}
         />
-      </label>
-      <br />
-      <button type="submit">log in</button>
+      </div>
+      <div className="ml-auto">
+        <Button primary>log in</Button>
+      </div>
     </form>
   );
 };

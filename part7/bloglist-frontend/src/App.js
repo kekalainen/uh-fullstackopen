@@ -9,6 +9,7 @@ import Blogs from './components/Blogs';
 import User from './components/User';
 import Users from './components/Users';
 import Navbar from './components/Navbar';
+import Card from './components/Card';
 
 const App = () => {
   const dispatch = useDispatch();
@@ -20,10 +21,11 @@ const App = () => {
 
   if (user === null) {
     return (
-      <div>
-        <h2>log in</h2>
-        <Notification />
-        <LoginForm />
+      <div className="grow flex justify-center items-center">
+        <Card title="log in">
+          <Notification />
+          <LoginForm />
+        </Card>
       </div>
     );
   }
