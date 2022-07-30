@@ -1,5 +1,6 @@
 import { useParams } from 'react-router-dom';
 import { useGetUsersQuery } from '../services/users';
+import BlogCard from './BlogCard';
 
 const User = () => {
   const { id } = useParams();
@@ -11,14 +12,16 @@ const User = () => {
 
   return (
     <>
-      <h2>{user?.name}</h2>
-      <h3>blogs</h3>
-      <ul>
+      <h2 className="text-xl mb-6">{user?.name}</h2>
+      <h3 className="text-lg mb-3">blogs</h3>
+      <div className="grid sm:grid-cols-2 lg:grid-cols-3 gap-3">
         {user?.blogs?.map((blog) => (
-          <li key={blog.id}>{blog.title}</li>
+          <BlogCard blog={blog} key={blog.id} />
         ))}
-      </ul>
-      {(!user?.blogs?.length ?? true) && <p>no blogs to display</p>}
+      </div>
+      {(!user?.blogs?.length ?? true) && (
+        <p className="text-slate-500">no blogs to display</p>
+      )}
     </>
   );
 };
