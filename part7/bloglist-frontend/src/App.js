@@ -31,9 +31,10 @@ const App = () => {
   }
 
   return (
-    <div>
+    <div className="mt-4 px-2 md:px-20 xl:px-40 2xl:px-60">
       <Navbar />
-      <h1>blogs</h1>
+      <div className="mb-4" />
+      <h1 className="hidden">blogs</h1>
       <Notification />
       <Routes>
         <Route path="/" element={<Blogs />}></Route>

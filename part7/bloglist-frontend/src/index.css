@@ -4,20 +4,6 @@ div#root {
   height: 100vh;
 }
 
-.navbar {
-  align-items: center;
-  background-color: #ccc;
-  display: flex;
-  justify-content: space-between;
-  padding: 0.5em;
-}
-
-.navbar a {
-  color: #000;
-  margin: 0.25em;
-  text-decoration: none;
-}
-
 .notification {
   background-color: #f5f5f5;
   border-left: 5px solid;

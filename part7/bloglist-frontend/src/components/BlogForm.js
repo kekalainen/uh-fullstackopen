@@ -3,6 +3,7 @@ import { useDispatch, useSelector } from 'react-redux';
 import FormInput from './FormInput';
 import { createBlog } from '../slices/blog';
 import { showTimedNotification } from '../slices/notification';
+import Button from './Button';
 
 const BlogForm = ({ onCreate }) => {
   const dispatch = useDispatch();
@@ -29,25 +30,27 @@ const BlogForm = ({ onCreate }) => {
 
   return (
     <form onSubmit={handleSubmit}>
-      <FormInput
-        label="title"
-        value={title}
-        onChange={({ target }) => setTitle(target.value)}
-      />
-      <br />
-      <FormInput
-        label="author"
-        value={author}
-        onChange={({ target }) => setAuthor(target.value)}
-      />
-      <br />
-      <FormInput
-        label="url"
-        value={url}
-        onChange={({ target }) => setUrl(target.value)}
-      />
-      <br />
-      <button type="submit">create</button>
+      <div className="flex gap-2 mb-2">
+        <FormInput
+          label="title"
+          value={title}
+          required
+          onChange={({ target }) => setTitle(target.value)}
+        />
+        <FormInput
+          label="author"
+          value={author}
+          required
+          onChange={({ target }) => setAuthor(target.value)}
+        />
+        <FormInput
+          label="url"
+          value={url}
+          required
+          onChange={({ target }) => setUrl(target.value)}
+        />
+      </div>
+      <Button primary>create</Button>
     </form>
   );
 };
