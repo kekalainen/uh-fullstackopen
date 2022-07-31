@@ -25,7 +25,7 @@ const Navbar = () => {
           <NavLink
             to={links[name]}
             className={({ isActive }) =>
-              `${isActive && 'underline'} hover:text-slate-200`
+              `${isActive && 'underline'} text-slate-50 hover:text-slate-200`
             }
             key={name}
           >

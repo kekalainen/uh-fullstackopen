@@ -3,6 +3,7 @@ import { useDispatch } from 'react-redux';
 import FormInput from './FormInput';
 import { createBlogComment } from '../slices/blog';
 import { showTimedNotification } from '../slices/notification';
+import Button from './Button';
 
 const BlogCommentForm = ({ id }) => {
   const dispatch = useDispatch();
@@ -21,14 +22,14 @@ const BlogCommentForm = ({ id }) => {
   };
 
   return (
-    <form onSubmit={handleSubmit}>
+    <form className="flex items-center gap-2" onSubmit={handleSubmit}>
       <FormInput
         required
         placeholder="enter a comment here"
         value={content}
         onChange={({ target }) => setContent(target.value)}
       />
-      <button type="submit">post</button>
+      <Button>post</Button>
     </form>
   );
 };
