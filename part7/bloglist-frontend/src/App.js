@@ -42,6 +42,7 @@ const App = () => {
         <Route path="/users" element={<Users />}></Route>
         <Route path="/users/:id" element={<User />}></Route>
       </Routes>
+      <div className="mb-4" />
     </div>
   );
 };
