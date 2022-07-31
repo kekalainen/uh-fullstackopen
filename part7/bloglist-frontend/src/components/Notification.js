@@ -6,7 +6,15 @@ const Notification = () => {
   if (notification === null) return null;
   const { type, message } = notification;
 
-  return <div className={`notification ${type}`}>{message}</div>;
+  return (
+    <div
+      className={`p-2 rounded mb-4 ${
+        type === 'success' && 'bg-green-300 text-green-700'
+      } ${type === 'error' && 'bg-red-300 text-red-700'}`}
+    >
+      <p>{message}</p>
+    </div>
+  );
 };
 
 export default Notification;

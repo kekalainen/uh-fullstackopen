@@ -12,12 +12,12 @@ const BlogForm = ({ onCreate }) => {
   const [author, setAuthor] = useState('');
   const [url, setUrl] = useState('');
 
-  const handleSubmit = (event) => {
+  const handleSubmit = async (event) => {
     event.preventDefault();
 
     try {
       const blog = { title, author, url, user };
-      dispatch(createBlog(blog));
+      await dispatch(createBlog(blog));
       onCreate(blog);
       setTitle('');
       setAuthor('');

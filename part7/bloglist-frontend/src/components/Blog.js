@@ -23,9 +23,13 @@ const Blog = () => {
   const handleDelete = async () => {
     if (!window.confirm(`delete blog "${blog.title}"?`)) return;
 
-    await dispatch(deleteBlog(blog));
-    dispatch(showTimedNotification(`deleted blog "${blog.title}"`));
-    navigate('/');
+    try {
+      await dispatch(deleteBlog(blog));
+      dispatch(showTimedNotification(`deleted blog "${blog.title}"`));
+      navigate('/');
+    } catch (exception) {
+      dispatch(showTimedNotification(exception, true));
+    }
   };
 
   return (
