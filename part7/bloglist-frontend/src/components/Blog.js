@@ -39,7 +39,7 @@ const Blog = () => {
         <div className="flex justify-between gap-2">
           <div>
             <a
-              className="break-all"
+              className="break-all text-slate-500 hover:text-slate-700"
               target="_blank"
               rel="noreferrer"
               href={blog.url}

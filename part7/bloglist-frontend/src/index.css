@@ -3,7 +3,3 @@ div#root {
   flex-direction: column;
   height: 100vh;
 }
-
-a {
-  @apply text-slate-500 hover:text-slate-700;
-}
