@@ -100,6 +100,7 @@ const typeDefs = gql`
   }
 
   type Mutation {
+    editAuthor(name: String!, setBornTo: Int!): Author
     addBook(
       author: String!
       genres: [String!]!
@@ -118,6 +119,15 @@ const typeDefs = gql`
 
 const resolvers = {
   Mutation: {
+    editAuthor: (_root, { name, setBornTo }) => {
+      const author = authors.find((a) => a.name === name);
+      if (!author) return null;
+
+      const updatedAuthor = { ...author, born: setBornTo };
+      authors = authors.map((a) => (a.id === author.id ? updatedAuthor : a));
+
+      return updatedAuthor;
+    },
     addBook: (_root, args) => {
       const book = { ...args, id: uuidv4() };
       books.push(book);
