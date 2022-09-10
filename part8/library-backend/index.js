@@ -121,6 +121,10 @@ const resolvers = {
     addBook: (_root, args) => {
       const book = { ...args, id: uuidv4() };
       books.push(book);
+
+      if (!authors.some((a) => a.name === book.author))
+        authors.push({ id: uuidv4(), name: book.author });
+
       return book;
     },
   },
