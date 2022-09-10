@@ -111,8 +111,11 @@ const resolvers = {
     authorCount: () => authors.length,
     allAuthors: () => authors,
     bookCount: () => books.length,
-    allBooks: (_root, { author }) =>
-      !author ? books : books.filter((b) => b.author === author),
+    allBooks: (_root, { author }) => {
+      let data = books;
+      if (author) data = data.filter((b) => b.author === author);
+      return data;
+    },
   },
   Author: {
     bookCount: ({ name }) => books.filter((b) => b.author === name).length,
