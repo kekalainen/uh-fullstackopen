@@ -1,7 +1,12 @@
-const Books = (props) => {
-  if (!props.show) return null;
+import { useQuery } from '@apollo/client';
+import { GET_ALL_BOOKS } from '../graphql/queries';
 
-  const books = [];
+const Books = (props) => {
+  const { data, loading } = useQuery(GET_ALL_BOOKS);
+
+  if (!props.show || loading) return null;
+
+  const books = data.allBooks;
 
   return (
     <div>
