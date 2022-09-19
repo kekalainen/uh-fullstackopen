@@ -1,5 +1,10 @@
 const { ApolloServer, gql } = require('apollo-server');
 const { v4: uuidv4 } = require('uuid');
+const dotenv = require('dotenv');
+const mongoose = require('mongoose');
+
+dotenv.config();
+mongoose.connect(process.env.MONGODB_URI);
 
 let authors = [
   {
