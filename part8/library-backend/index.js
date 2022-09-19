@@ -1,8 +1,10 @@
 const { ApolloServer, gql, UserInputError } = require('apollo-server');
 const dotenv = require('dotenv');
+const jwt = require('jsonwebtoken');
 const mongoose = require('mongoose');
 const Author = require('./models/author');
 const Book = require('./models/book');
+const User = require('./models/user');
 
 dotenv.config();
 mongoose.connect(process.env.MONGODB_URI);
@@ -87,6 +89,18 @@ const resolvers = {
 
       return book;
     },
+    createUser: async (_root, { username, favouriteGenre }) => {
+      const user = new User({ username, favouriteGenre });
+      return user.save().catch(handleDatabaseError);
+    },
+    login: async (_root, { username, password }) => {
+      const user = await User.findOne({ username });
+
+      if (!user || password !== 'hunter2')
+        throw new UserInputError('invalid credentials');
+
+      return { value: jwt.sign({ id: user._id }, process.env.JWT_SECRET) };
+    },
   },
   Query: {
     authorCount: () => Author.collection.countDocuments(),
@@ -98,6 +112,7 @@ const resolvers = {
       if (genre) filter.genres = genre;
       return Book.find(filter);
     },
+    me: (_root, _args, { authUser }) => authUser,
   },
   Author: {
     bookCount: async (parent) => Book.countDocuments({ author: parent }),
@@ -113,6 +128,14 @@ const resolvers = {
 const server = new ApolloServer({
   typeDefs,
   resolvers,
+  context: async ({ req }) => {
+    const auth = req?.headers?.authorization;
+    if (auth && auth.toLowerCase().startsWith('bearer ')) {
+      const { id } = jwt.verify(auth.substring(7), process.env.JWT_SECRET);
+      const authUser = await User.findById(id);
+      return { authUser };
+    }
+  },
 });
 
 server.listen().then(({ url }) => {
