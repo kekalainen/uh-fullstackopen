@@ -55,6 +55,7 @@ const Authors = (props) => {
         <label>
           year
           <input
+            required
             type="number"
             value={year}
             onChange={({ target }) => setYear(target.value)}
