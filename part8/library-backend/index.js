@@ -1,4 +1,4 @@
-const { ApolloServer, gql } = require('apollo-server');
+const { ApolloServer, gql, UserInputError } = require('apollo-server');
 const dotenv = require('dotenv');
 const mongoose = require('mongoose');
 const Author = require('./models/author');
@@ -6,6 +6,22 @@ const Book = require('./models/book');
 
 dotenv.config();
 mongoose.connect(process.env.MONGODB_URI);
+
+const handleDatabaseError = (error) => {
+  if (error.name === 'ValidationError')
+    throw new UserInputError(error.message, {
+      invalidArgs: Object.keys(error.errors).map((k) => error.errors[k].path),
+    });
+  else if (
+    error.name === 'MongoServerError' &&
+    error.code === 11000 // duplicate key
+  )
+    throw new UserInputError(error.message, {
+      invalidArgs: Object.keys(error.keyPattern),
+    });
+
+  throw error;
+};
 
 const typeDefs = gql`
   type Author {
@@ -50,11 +66,11 @@ const resolvers = {
 
       if (!author) {
         author = new Author({ name });
-        await author.save();
+        await author.save().catch(handleDatabaseError);
       }
 
       const book = new Book({ author, genres, published, title });
-      await book.save();
+      await book.save().catch(handleDatabaseError);
 
       return book;
     },
