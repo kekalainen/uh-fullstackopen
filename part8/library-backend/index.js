@@ -1,7 +1,8 @@
 const { ApolloServer, gql } = require('apollo-server');
-const { v4: uuidv4 } = require('uuid');
 const dotenv = require('dotenv');
 const mongoose = require('mongoose');
+const Author = require('./models/author');
+const Book = require('./models/book');
 
 dotenv.config();
 mongoose.connect(process.env.MONGODB_URI);
@@ -43,37 +44,41 @@ const typeDefs = gql`
 const resolvers = {
   Mutation: {
     editAuthor: (_root, { name, setBornTo }) => {
-      const author = authors.find((a) => a.name === name);
-      if (!author) return null;
-
-      const updatedAuthor = { ...author, born: setBornTo };
-      authors = authors.map((a) => (a.id === author.id ? updatedAuthor : a));
-
-      return updatedAuthor;
+      // TODO: Reimplement.
     },
-    addBook: (_root, args) => {
-      const book = { ...args, id: uuidv4() };
-      books.push(book);
+    addBook: async (_root, { author: name, genres, published, title }) => {
+      let author = await Author.findOne({ name });
 
-      if (!authors.some((a) => a.name === book.author))
-        authors.push({ id: uuidv4(), name: book.author });
+      if (!author) {
+        author = new Author({ name });
+        await author.save();
+      }
+
+      const book = new Book({ author, genres, published, title });
+      await book.save();
 
       return book;
     },
   },
   Query: {
-    authorCount: () => authors.length,
-    allAuthors: () => authors,
-    bookCount: () => books.length,
-    allBooks: (_root, { author, genre }) => {
-      let data = books;
-      if (author) data = data.filter((b) => b.author === author);
-      if (genre) data = data.filter((b) => b.genres.includes(genre));
-      return data;
+    authorCount: () => Author.collection.countDocuments(),
+    allAuthors: async () => Author.find({}),
+    bookCount: () => Book.collection.countDocuments(),
+    allBooks: async (_root, { author, genre }) => {
+      let filter = {};
+      if (author) filter.author = await Author.find({ name: author });
+      if (genre) filter.genres = genre;
+      return Book.find(filter);
     },
   },
   Author: {
-    bookCount: ({ name }) => books.filter((b) => b.author === name).length,
+    bookCount: async (parent) => Book.countDocuments({ author: parent }),
+  },
+  Book: {
+    author: async (parent) => {
+      await parent.populate('author');
+      return parent.author;
+    },
   },
 };
 
