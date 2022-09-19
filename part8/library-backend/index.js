@@ -1,4 +1,9 @@
-const { ApolloServer, gql, UserInputError } = require('apollo-server');
+const {
+  ApolloServer,
+  gql,
+  UserInputError,
+  AuthenticationError,
+} = require('apollo-server');
 const dotenv = require('dotenv');
 const jwt = require('jsonwebtoken');
 const mongoose = require('mongoose');
@@ -74,9 +79,22 @@ const typeDefs = gql`
 
 const resolvers = {
   Mutation: {
-    editAuthor: async (_root, { name, setBornTo }) =>
-      Author.findOneAndUpdate({ name }, { born: setBornTo }, { new: true }),
-    addBook: async (_root, { author: name, genres, published, title }) => {
+    editAuthor: async (_root, { name, setBornTo }, { authUser }) => {
+      if (!authUser) throw new AuthenticationError('unauthenticated');
+
+      return Author.findOneAndUpdate(
+        { name },
+        { born: setBornTo },
+        { new: true }
+      );
+    },
+    addBook: async (
+      _root,
+      { author: name, genres, published, title },
+      { authUser }
+    ) => {
+      if (!authUser) throw new AuthenticationError('unauthenticated');
+
       let author = await Author.findOne({ name });
 
       if (!author) {
