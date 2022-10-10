@@ -1,3 +1,4 @@
+import { useApolloClient } from '@apollo/client';
 import { useState } from 'react';
 import Authors from './components/Authors';
 import Books from './components/Books';
@@ -12,10 +13,18 @@ const App = () => {
     localStorage.getItem(AUTH_TOKEN_LOCAL_STORAGE_KEY)
   );
 
+  const client = useApolloClient();
+
   const handleLogin = (authToken) => {
     localStorage.setItem(AUTH_TOKEN_LOCAL_STORAGE_KEY, authToken);
     setAuthToken(authToken);
     setPage('authors');
+  };
+
+  const handleLogout = () => {
+    localStorage.removeItem(AUTH_TOKEN_LOCAL_STORAGE_KEY);
+    setAuthToken(null);
+    client.resetStore();
   };
 
   return (
@@ -25,6 +34,7 @@ const App = () => {
         <button onClick={() => setPage('books')}>books</button>
         <button onClick={() => setPage('add')}>add book</button>
         {!authToken && <button onClick={() => setPage('login')}>login</button>}
+        {authToken && <button onClick={() => handleLogout()}>logout</button>}
       </div>
 
       <Authors show={page === 'authors'} />
