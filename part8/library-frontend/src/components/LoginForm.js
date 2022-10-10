@@ -6,15 +6,14 @@ const LoginForm = ({ onLogin }) => {
   const [username, setUsername] = useState('');
   const [password, setPassword] = useState('');
 
-  const [login, { data, error }] = useMutation(LOGIN);
+  const [login] = useMutation(LOGIN, {
+    onCompleted: ({ login: { value: token } }) => onLogin(token),
+  });
 
   const handleSubmit = async (event) => {
     event.preventDefault();
 
     await login({ variables: { username, password } });
-    if (error) return;
-
-    await onLogin(data.login.value);
 
     setUsername('');
     setPassword('');
