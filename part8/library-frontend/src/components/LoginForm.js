@@ -1,13 +1,20 @@
+import { useMutation } from '@apollo/client';
 import { useState } from 'react';
+import { LOGIN } from '../graphql/mutations';
 
-const LoginForm = () => {
+const LoginForm = ({ onLogin }) => {
   const [username, setUsername] = useState('');
   const [password, setPassword] = useState('');
 
-  const handleSubmit = (event) => {
+  const [login, { data, error }] = useMutation(LOGIN);
+
+  const handleSubmit = async (event) => {
     event.preventDefault();
 
-    // TODO: implement.
+    await login({ variables: { username, password } });
+    if (error) return;
+
+    await onLogin(data.login.value);
 
     setUsername('');
     setPassword('');
@@ -27,6 +34,7 @@ const LoginForm = () => {
         <label>
           password
           <input
+            type="password"
             value={password}
             onChange={({ target }) => setPassword(target.value)}
           />

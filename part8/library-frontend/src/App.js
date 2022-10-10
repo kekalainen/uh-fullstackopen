@@ -4,8 +4,19 @@ import Books from './components/Books';
 import LoginForm from './components/LoginForm';
 import NewBook from './components/NewBook';
 
+const AUTH_TOKEN_LOCAL_STORAGE_KEY = 'library-auth-token';
+
 const App = () => {
   const [page, setPage] = useState('authors');
+  const [authToken, setAuthToken] = useState(
+    localStorage.getItem(AUTH_TOKEN_LOCAL_STORAGE_KEY)
+  );
+
+  const handleLogin = (authToken) => {
+    localStorage.setItem(AUTH_TOKEN_LOCAL_STORAGE_KEY, authToken);
+    setAuthToken(authToken);
+    setPage('authors');
+  };
 
   return (
     <div>
@@ -13,7 +24,7 @@ const App = () => {
         <button onClick={() => setPage('authors')}>authors</button>
         <button onClick={() => setPage('books')}>books</button>
         <button onClick={() => setPage('add')}>add book</button>
-        <button onClick={() => setPage('login')}>login</button>
+        {!authToken && <button onClick={() => setPage('login')}>login</button>}
       </div>
 
       <Authors show={page === 'authors'} />
@@ -22,7 +33,7 @@ const App = () => {
 
       <NewBook show={page === 'add'} />
 
-      {page === 'login' && <LoginForm />}
+      {page === 'login' && <LoginForm onLogin={handleLogin} />}
     </div>
   );
 };
