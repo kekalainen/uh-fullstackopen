@@ -4,6 +4,7 @@ import Authors from './components/Authors';
 import Books from './components/Books';
 import LoginForm from './components/LoginForm';
 import NewBook from './components/NewBook';
+import Recommendations from './components/Recommendations';
 
 const AUTH_TOKEN_LOCAL_STORAGE_KEY = 'library-auth-token';
 
@@ -32,6 +33,11 @@ const App = () => {
       <div>
         <button onClick={() => setPage('authors')}>authors</button>
         <button onClick={() => setPage('books')}>books</button>
+        {authToken && (
+          <button onClick={() => setPage('recommendations')}>
+            recommendations
+          </button>
+        )}
         {authToken && <button onClick={() => setPage('add')}>add book</button>}
         {!authToken && <button onClick={() => setPage('login')}>login</button>}
         {authToken && <button onClick={() => handleLogout()}>logout</button>}
@@ -40,6 +46,8 @@ const App = () => {
       <Authors show={page === 'authors'} authToken={authToken} />
 
       <Books show={page === 'books'} />
+
+      <Recommendations show={page === 'recommendations'} />
 
       <NewBook show={page === 'add'} />
 
