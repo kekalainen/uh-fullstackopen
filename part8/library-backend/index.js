@@ -4,15 +4,14 @@ const {
   UserInputError,
   AuthenticationError,
 } = require('apollo-server');
-const dotenv = require('dotenv');
 const jwt = require('jsonwebtoken');
 const mongoose = require('mongoose');
 const Author = require('./models/author');
 const Book = require('./models/book');
 const User = require('./models/user');
+const { JWT_SECRET, MONGODB_URI } = require('./utils/config');
 
-dotenv.config();
-mongoose.connect(process.env.MONGODB_URI);
+mongoose.connect(MONGODB_URI);
 
 const handleDatabaseError = (error) => {
   if (error.name === 'ValidationError')
@@ -117,7 +116,7 @@ const resolvers = {
       if (!user || password !== 'hunter2')
         throw new UserInputError('invalid credentials');
 
-      return { value: jwt.sign({ id: user._id }, process.env.JWT_SECRET) };
+      return { value: jwt.sign({ id: user._id }, JWT_SECRET) };
     },
   },
   Query: {
@@ -149,7 +148,7 @@ const server = new ApolloServer({
   context: async ({ req }) => {
     const auth = req?.headers?.authorization;
     if (auth && auth.toLowerCase().startsWith('bearer ')) {
-      const { id } = jwt.verify(auth.substring(7), process.env.JWT_SECRET);
+      const { id } = jwt.verify(auth.substring(7), JWT_SECRET);
       const authUser = await User.findById(id);
       return { authUser };
     }
