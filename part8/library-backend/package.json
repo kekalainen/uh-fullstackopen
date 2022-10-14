@@ -6,6 +6,8 @@
     "dev": "nodemon index.js"
   },
   "dependencies": {
+    "@graphql-tools/load-files": "^6.6.1",
+    "@graphql-tools/merge": "^8.3.6",
     "apollo-server": "^3.10.2",
     "dotenv": "^16.0.2",
     "graphql": "^16.6.0",

@@ -1,11 +1,11 @@
 const {
   ApolloServer,
-  gql,
   UserInputError,
   AuthenticationError,
 } = require('apollo-server');
 const jwt = require('jsonwebtoken');
 const mongoose = require('mongoose');
+const { typeDefs } = require('./graphql');
 const Author = require('./models/author');
 const Book = require('./models/book');
 const User = require('./models/user');
@@ -13,53 +13,6 @@ const { JWT_SECRET, MONGODB_URI } = require('./utils/config');
 const { handleDatabaseError } = require('./utils/errors');
 
 mongoose.connect(MONGODB_URI);
-
-const typeDefs = gql`
-  type Author {
-    bookCount: Int!
-    born: Int
-    id: ID!
-    name: String!
-  }
-
-  type Book {
-    author: Author!
-    genres: [String!]!
-    id: ID!
-    published: Int!
-    title: String!
-  }
-
-  type User {
-    username: String!
-    favouriteGenre: String!
-    id: ID!
-  }
-
-  type Token {
-    value: String!
-  }
-
-  type Mutation {
-    editAuthor(name: String!, setBornTo: Int!): Author
-    addBook(
-      author: String!
-      genres: [String!]!
-      published: Int!
-      title: String!
-    ): Book
-    createUser(username: String!, favouriteGenre: String!): User
-    login(username: String!, password: String!): Token
-  }
-
-  type Query {
-    authorCount: Int!
-    allAuthors: [Author!]!
-    bookCount: Int!
-    allBooks(author: String, genre: String): [Book!]!
-    me: User
-  }
-`;
 
 const resolvers = {
   Mutation: {
