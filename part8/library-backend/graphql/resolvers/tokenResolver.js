@@ -1,4 +1,4 @@
-const { UserInputError } = require('apollo-server');
+const { UserInputError } = require('apollo-server-core');
 const { JWT_SECRET } = require('../../utils/config');
 const User = require('../../models/user');
 

@@ -1,4 +1,4 @@
-const { AuthenticationError } = require('apollo-server');
+const { AuthenticationError } = require('apollo-server-core');
 const Author = require('../../models/author');
 const Book = require('../../models/book');
 

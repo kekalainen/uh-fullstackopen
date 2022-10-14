@@ -1,4 +1,4 @@
-const { UserInputError } = require('apollo-server');
+const { UserInputError } = require('apollo-server-core');
 
 const handleDatabaseError = (error) => {
   if (error.name === 'ValidationError')
