@@ -3,7 +3,7 @@ const { ApolloServer } = require('apollo-server-express');
 const { createServer } = require('http');
 const express = require('express');
 const mongoose = require('mongoose');
-const { context, resolvers, typeDefs } = require('./graphql');
+const { context, schema } = require('./graphql');
 const { MONGODB_URI, PORT } = require('./utils/config');
 
 mongoose.connect(MONGODB_URI);
@@ -13,9 +13,8 @@ const app = express();
 const httpServer = createServer(app);
 
 const apolloServer = new ApolloServer({
-  typeDefs,
-  resolvers,
   context,
+  schema,
   plugins: [ApolloServerPluginDrainHttpServer({ httpServer })],
 });
 
