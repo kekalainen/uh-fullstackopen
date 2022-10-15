@@ -1,6 +1,7 @@
 import { useQuery } from '@apollo/client';
 import { useState } from 'react';
 import { GET_ALL_BOOKS } from '../graphql/queries';
+import { useBookAddedSubscription } from '../hooks';
 import BooksGenreButtons from './BooksGenreButtons';
 import BooksTable from './BooksTable';
 
@@ -12,6 +13,8 @@ const Books = (props) => {
       ...(genre && { genre }),
     },
   });
+
+  useBookAddedSubscription();
 
   if (!props.show) return null;
 
