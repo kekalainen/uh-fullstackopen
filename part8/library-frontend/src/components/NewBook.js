@@ -2,6 +2,7 @@ import { useMutation } from '@apollo/client';
 import { useState } from 'react';
 import { ADD_BOOK } from '../graphql/mutations';
 import { GET_ALL_AUTHORS, GET_ALL_BOOKS } from '../graphql/queries';
+import { addOrUpdateCachedQueryArrayItem } from '../graphql/utils';
 
 const NewBook = (props) => {
   const [title, setTitle] = useState('');
@@ -19,14 +20,25 @@ const NewBook = (props) => {
 
     addBook({
       variables: { author, genres, published: +published, title },
-      refetchQueries: [
-        { query: GET_ALL_AUTHORS },
-        { query: GET_ALL_BOOKS },
-        ...genres.map((g) => ({
-          query: GET_ALL_BOOKS,
-          variables: { genre: g },
-        })),
-      ],
+
+      update: (cache, { data: { addBook: book } }) => {
+        addOrUpdateCachedQueryArrayItem(
+          cache,
+          { query: GET_ALL_AUTHORS },
+          book.author
+        );
+
+        [{ query: GET_ALL_BOOKS }]
+          .concat(
+            genres.map((g) => ({
+              query: GET_ALL_BOOKS,
+              variables: { genre: g },
+            }))
+          )
+          .forEach((query) =>
+            addOrUpdateCachedQueryArrayItem(cache, query, book)
+          );
+      },
     });
 
     setTitle('');
