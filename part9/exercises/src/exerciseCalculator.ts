@@ -44,4 +44,28 @@ const calculateExercises = (
   };
 };
 
-console.log(calculateExercises([3, 0, 2, 4.5, 0, 3, 1], 2));
+const parseExerciseArguments = (
+  argv: string[]
+): Parameters<typeof calculateExercises> => {
+  const arguments = argv
+    .splice(2)
+    .map((arg) => parseFloat(arg))
+    .filter((arg) => !isNaN(arg));
+
+  if (arguments.length < 2)
+    throw new Error('At least two numeric arguments are required.');
+
+  const [target, ...hours] = arguments;
+  return [hours, target];
+};
+
+if (process.argv.length > 2) {
+  try {
+    console.log(calculateExercises(...parseExerciseArguments(process.argv)));
+  } catch (error: unknown) {
+    console.log(
+      'Failed to calculate exercises.',
+      error instanceof Error ? error.message : 'Unknown error.'
+    );
+  }
+}

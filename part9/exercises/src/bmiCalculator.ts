@@ -33,4 +33,25 @@ const calculateBmi = (height: number, mass: number): string => {
   return bmiCategory(bmiMetricUnits(height, mass));
 };
 
-console.log(calculateBmi(180, 74));
+const parseBmiArguments = (argv: string[]): Parameters<typeof calculateBmi> => {
+  const arguments = argv
+    .splice(2)
+    .map((arg) => parseFloat(arg))
+    .filter((arg) => !isNaN(arg));
+
+  if (arguments.length !== 2)
+    throw new Error('Exactly two numeric arguments are required.');
+
+  return [arguments[0], arguments[1]];
+};
+
+if (process.argv.length > 2) {
+  try {
+    console.log(calculateBmi(...parseBmiArguments(process.argv)));
+  } catch (error: unknown) {
+    console.log(
+      'Failed to calculate BMI.',
+      error instanceof Error ? error.message : 'Unknown error.'
+    );
+  }
+}
