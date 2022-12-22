@@ -2,7 +2,8 @@
   "name": "exercises",
   "private": true,
   "scripts": {
-    "calculateBmi": "ts-node src/bmiCalculator.ts"
+    "calculateBmi": "ts-node src/bmiCalculator.ts",
+    "calculateExercises": "ts-node src/exerciseCalculator.ts"
   },
   "devDependencies": {
     "ts-node": "^10.9.1",
