@@ -1,3 +1,4 @@
+import cors from 'cors';
 import express from 'express';
 
 const PROTOCOL = 'http',
@@ -6,6 +7,7 @@ const PROTOCOL = 'http',
 
 const app = express();
 
+app.use(cors());
 app.use(express.json());
 
 app.get('/api/ping', (_req, res) => {
