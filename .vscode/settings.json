@@ -1,6 +1,10 @@
 {
   "editor.defaultFormatter": "esbenp.prettier-vscode",
   "editor.formatOnSave": true,
+  "eslint.workingDirectories": [
+    "./part9/exercises/",
+    "./part9/patientor-backend/"
+  ],
   "prettier.singleQuote": true,
   "rest-client.environmentVariables": {
     "local": {
