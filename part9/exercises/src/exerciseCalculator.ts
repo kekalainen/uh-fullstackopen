@@ -14,7 +14,7 @@ enum ExerciseRating {
   Good,
 }
 
-const calculateExercises = (
+export const calculateExercises = (
   hours: number[],
   target: number
 ): ExerciseCalculatorResult => {
@@ -44,13 +44,15 @@ const calculateExercises = (
   };
 };
 
-const parseExerciseArguments = (
-  argv: string[]
+export const parseExerciseArguments = (
+  argv: (string | number)[]
 ): Parameters<typeof calculateExercises> => {
-  const args = argv
-    .splice(2)
-    .map((arg) => parseFloat(arg))
-    .filter((arg) => !isNaN(arg));
+  const args = argv.map((arg) =>
+    typeof arg === 'string' ? parseFloat(arg) : arg
+  );
+
+  if (args.some((arg) => isNaN(arg)))
+    throw new Error('Arguments must be convertible to numeric.');
 
   if (args.length < 2)
     throw new Error('At least two numeric arguments are required.');
@@ -61,7 +63,9 @@ const parseExerciseArguments = (
 
 if (process.argv.length > 2) {
   try {
-    console.log(calculateExercises(...parseExerciseArguments(process.argv)));
+    console.log(
+      calculateExercises(...parseExerciseArguments(process.argv.splice(2)))
+    );
   } catch (error: unknown) {
     console.log(
       'Failed to calculate exercises.',
