@@ -47,15 +47,15 @@ const calculateExercises = (
 const parseExerciseArguments = (
   argv: string[]
 ): Parameters<typeof calculateExercises> => {
-  const arguments = argv
+  const args = argv
     .splice(2)
     .map((arg) => parseFloat(arg))
     .filter((arg) => !isNaN(arg));
 
-  if (arguments.length < 2)
+  if (args.length < 2)
     throw new Error('At least two numeric arguments are required.');
 
-  const [target, ...hours] = arguments;
+  const [target, ...hours] = args;
   return [hours, target];
 };
 
