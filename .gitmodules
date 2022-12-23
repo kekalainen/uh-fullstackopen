@@ -1,0 +1,3 @@
+[submodule "part9/patientor-frontend"]
+	path = part9/patientor-frontend
+	url = https://github.com/kekalainen/uh-fullstackopen-part9-patientor-frontend.git
