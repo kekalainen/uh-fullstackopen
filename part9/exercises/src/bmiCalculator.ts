@@ -29,25 +29,24 @@ const bmiCategory = (bmi: number): string => {
   }
 };
 
-const calculateBmi = (height: number, mass: number): string => {
+export const calculateBmi = (height: number, mass: number): string => {
   return bmiCategory(bmiMetricUnits(height, mass));
 };
 
-const parseBmiArguments = (argv: string[]): Parameters<typeof calculateBmi> => {
-  const arguments = argv
-    .splice(2)
-    .map((arg) => parseFloat(arg))
-    .filter((arg) => !isNaN(arg));
+export const parseBmiArguments = (
+  argv: string[]
+): Parameters<typeof calculateBmi> => {
+  const args = argv.map((arg) => parseFloat(arg)).filter((arg) => !isNaN(arg));
 
-  if (arguments.length !== 2)
+  if (args.length !== 2)
     throw new Error('Exactly two numeric arguments are required.');
 
-  return [arguments[0], arguments[1]];
+  return [args[0], args[1]];
 };
 
 if (process.argv.length > 2) {
   try {
-    console.log(calculateBmi(...parseBmiArguments(process.argv)));
+    console.log(calculateBmi(...parseBmiArguments(process.argv.splice(2))));
   } catch (error: unknown) {
     console.log(
       'Failed to calculate BMI.',
