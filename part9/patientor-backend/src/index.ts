@@ -1,6 +1,7 @@
 import cors from 'cors';
 import express from 'express';
 import diagnosisRouter from './routes/diagnoses';
+import patientRouter from './routes/patients';
 
 const PROTOCOL = 'http',
   HOST = 'localhost',
@@ -16,6 +17,7 @@ app.get('/api/ping', (_req, res) => {
 });
 
 app.use('/api/diagnoses', diagnosisRouter);
+app.use('/api/patients', patientRouter);
 
 app.listen(PORT, () => {
   console.log(`Server listening at ${PROTOCOL}://${HOST}:${PORT}`);
