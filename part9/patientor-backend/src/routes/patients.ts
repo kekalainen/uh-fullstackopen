@@ -1,6 +1,6 @@
 import express, { Request } from 'express';
 import patientService from '../services/patientService';
-import { NewPatient } from '../types';
+import { toNewPatient } from '../utils';
 
 const router = express.Router();
 
@@ -8,18 +8,19 @@ router.get('/', (_req, res) => {
   res.send(patientService.getNonSensitive());
 });
 
-router.post('/', (req: Request<unknown, unknown, NewPatient>, res) => {
-  const { name, dateOfBirth, ssn, gender, occupation } = req.body;
+router.post(
+  '/',
+  (req: Request<unknown, unknown, Record<string, unknown>>, res) => {
+    try {
+      const patient = patientService.add(toNewPatient(req.body));
 
-  const patient = patientService.add({
-    name,
-    dateOfBirth,
-    ssn,
-    gender,
-    occupation,
-  });
-
-  res.json(patient);
-});
+      res.json(patient);
+    } catch (error: unknown) {
+      res.status(400).json({
+        error: error instanceof Error ? error.message : 'Unknown error.',
+      });
+    }
+  }
+);
 
 export default router;
