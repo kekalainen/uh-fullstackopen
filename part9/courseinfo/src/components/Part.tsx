@@ -1,8 +1,38 @@
 import { CoursePart } from '../types';
+import { assertNever } from '../utils';
 
 const Part = ({ part }: { part: CoursePart }) => (
   <p>
-    {part.name} {part.exerciseCount}
+    <b>
+      {part.name} {part.exerciseCount}
+    </b>
+    <br />
+    {'description' in part && (
+      <i>
+        {part.description}
+        <br />
+      </i>
+    )}
+    {(() => {
+      switch (part.type) {
+        case 'normal':
+          break;
+        case 'groupProject':
+          return <>project exercises {part.groupProjectCount}</>;
+        case 'submission':
+          return (
+            <a
+              href={part.exerciseSubmissionLink}
+              rel="noreferrer"
+              target="_blank"
+            >
+              submissions
+            </a>
+          );
+        default:
+          return assertNever(part);
+      }
+    })()}
   </p>
 );
 
