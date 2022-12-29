@@ -17,6 +17,11 @@ interface CourseProjectPart extends CoursePartBase {
   groupProjectCount: number;
 }
 
+interface CourseSpecialPart extends CoursePartDescribable {
+  type: 'special';
+  requirements: string[];
+}
+
 interface CourseSubmissionPart extends CoursePartDescribable {
   type: 'submission';
   exerciseSubmissionLink: string;
@@ -25,4 +30,5 @@ interface CourseSubmissionPart extends CoursePartDescribable {
 export type CoursePart =
   | CourseNormalPart
   | CourseProjectPart
+  | CourseSpecialPart
   | CourseSubmissionPart;

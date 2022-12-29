@@ -19,6 +19,8 @@ const Part = ({ part }: { part: CoursePart }) => (
           break;
         case 'groupProject':
           return <>project exercises {part.groupProjectCount}</>;
+        case 'special':
+          return <>required skills: {part.requirements.join(', ')}</>;
         case 'submission':
           return (
             <a
