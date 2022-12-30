@@ -3,7 +3,8 @@
   "editor.formatOnSave": true,
   "eslint.workingDirectories": [
     "./part9/exercises/",
-    "./part9/patientor-backend/"
+    "./part9/patientor-backend/",
+    "./part9/patientor-frontend/"
   ],
   "prettier.singleQuote": true,
   "rest-client.environmentVariables": {
