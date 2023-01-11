@@ -10,12 +10,19 @@ export enum Gender {
   Other = 'other',
 }
 
+export const EntryTypes = [
+  'HealthCheck',
+  'Hospital',
+  'OccupationalHealthcare',
+] as const;
+
 interface BaseEntry {
   id: string;
   description: string;
   date: string;
   specialist: string;
   diagnosisCodes?: Array<Diagnosis['code']>;
+  type: typeof EntryTypes[number];
 }
 
 export enum HealthCheckRating {

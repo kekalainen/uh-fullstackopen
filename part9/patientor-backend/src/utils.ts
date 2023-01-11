@@ -1,4 +1,16 @@
-import { Gender, NewPatient } from './types';
+import { Entry, EntryTypes, Gender, NewPatient } from './types';
+
+const isArray = (arg: unknown): arg is unknown[] => {
+  return Array.isArray(arg);
+};
+
+const isObject = (arg: unknown): arg is object => {
+  return typeof arg === 'object' && arg !== null;
+};
+
+const isUndefinedOrNull = (arg: unknown): arg is undefined | null => {
+  return typeof arg === 'undefined' || arg === null;
+};
 
 const isString = (arg: unknown): arg is string => {
   return typeof arg === 'string' || arg instanceof String;
@@ -14,6 +26,15 @@ const capitalizeFirst = (str: string): string => {
 
 const isGender = (arg: unknown): arg is Gender => {
   return isString(arg) && capitalizeFirst(arg) in Gender;
+};
+
+const isEntry = (arg: unknown): arg is Entry => {
+  return (
+    isObject(arg) &&
+    'type' in arg &&
+    isString(arg.type) &&
+    EntryTypes.includes(arg.type as typeof EntryTypes[number])
+  );
 };
 
 const parseName = (name: unknown): string => {
@@ -57,12 +78,25 @@ const parseGender = (gender: unknown): Gender => {
   return gender;
 };
 
+const parseEntries = (entries: unknown): Entry[] => {
+  if (isUndefinedOrNull(entries)) return [];
+
+  if (!isArray(entries))
+    throw new Error('Entries must be convertible to an array.');
+
+  if (!entries.every((entry): entry is Entry => isEntry(entry)))
+    throw new Error('Each entry must conform to the Entry type.');
+
+  return entries;
+};
+
 export const toNewPatient = ({
   name,
   dateOfBirth,
   ssn,
   gender,
   occupation,
+  entries,
 }: Record<string, unknown>): NewPatient => {
   return {
     name: parseName(name),
@@ -70,6 +104,6 @@ export const toNewPatient = ({
     ssn: parseSsn(ssn),
     occupation: parseOccupation(occupation),
     gender: parseGender(gender),
-    entries: [],
+    entries: parseEntries(entries),
   };
 };
