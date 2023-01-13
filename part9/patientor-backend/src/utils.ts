@@ -37,10 +37,10 @@ const isEntry = (arg: unknown): arg is Entry => {
   );
 };
 
-const parseName = (name: unknown): string => {
-  if (!isString(name)) throw new Error('Name must be a string.');
+const parseString = (arg: unknown, propertyName: string): string => {
+  if (!isString(arg)) throw new Error(`${propertyName} must be a string.`);
 
-  return name;
+  return arg;
 };
 
 const parseDate = (date: unknown): string => {
@@ -55,12 +55,6 @@ const parseSsn = (ssn: unknown): string => {
     throw new Error('SSN must be formatted properly.');
 
   return ssn;
-};
-
-const parseOccupation = (occupation: unknown): string => {
-  if (!isString(occupation)) throw new Error('Occupation must be a string.');
-
-  return occupation;
 };
 
 const parseGender = (gender: unknown): Gender => {
@@ -99,10 +93,10 @@ export const toNewPatient = ({
   entries,
 }: Record<string, unknown>): NewPatient => {
   return {
-    name: parseName(name),
+    name: parseString(name, 'Name'),
     dateOfBirth: parseDate(dateOfBirth),
     ssn: parseSsn(ssn),
-    occupation: parseOccupation(occupation),
+    occupation: parseString(occupation, 'Occupation'),
     gender: parseGender(gender),
     entries: parseEntries(entries),
   };
