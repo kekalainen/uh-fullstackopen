@@ -1,4 +1,20 @@
-import { Entry, EntryTypes, Gender, NewPatient } from './types';
+import {
+  Entry,
+  EntryTypes,
+  Gender,
+  HealthCheckRating,
+  HospitalDischarge,
+  NewEntry,
+  NewPatient,
+  SickLeave,
+  TypeSpecificEntry,
+} from './types';
+
+const assertNever = (value: never): never => {
+  throw new Error(
+    `Unhandled discriminated union member: ${JSON.stringify(value)}`
+  );
+};
 
 const isArray = (arg: unknown): arg is unknown[] => {
   return Array.isArray(arg);
@@ -26,6 +42,34 @@ const capitalizeFirst = (str: string): string => {
 
 const isGender = (arg: unknown): arg is Gender => {
   return isString(arg) && capitalizeFirst(arg) in Gender;
+};
+
+const isHealthCheckRating = (arg: unknown): arg is HealthCheckRating => {
+  const enumValues = Object.values(HealthCheckRating);
+  return enumValues.slice(enumValues.length / 2).includes(Number(arg));
+};
+
+const isHospitalDischarge = (arg: unknown): arg is HospitalDischarge => {
+  return (
+    isObject(arg) &&
+    'date' in arg &&
+    isString(arg.date) &&
+    isDate(arg.date) &&
+    'criteria' in arg &&
+    isString(arg.criteria)
+  );
+};
+
+const isSickLeave = (arg: unknown): arg is SickLeave => {
+  return (
+    isObject(arg) &&
+    'startDate' in arg &&
+    isString(arg.startDate) &&
+    isDate(arg.startDate) &&
+    'endDate' in arg &&
+    isString(arg.endDate) &&
+    isDate(arg.endDate)
+  );
 };
 
 const isEntry = (arg: unknown): arg is Entry => {
@@ -72,6 +116,70 @@ const parseGender = (gender: unknown): Gender => {
   return gender;
 };
 
+const parseDiagnosisCodes = (arg: unknown): Entry['diagnosisCodes'] => {
+  if (!isArray(arg) || !arg.every((code): code is string => isString(code)))
+    throw new Error('Diagnosis codes must be an array of strings.');
+
+  return arg;
+};
+
+const parseHealthCheckRating = (rating: unknown): HealthCheckRating => {
+  if (!isHealthCheckRating(rating))
+    throw new Error(
+      'Health check rating must be convertible to a number within the accepted range.'
+    );
+
+  return Number(rating);
+};
+
+const parseHospitalDischarge = (
+  hospitalDischarge: unknown
+): HospitalDischarge => {
+  if (!isHospitalDischarge(hospitalDischarge))
+    throw new Error('Hospital discharge must conform to its type.');
+
+  return {
+    date: parseDate(hospitalDischarge.date),
+    criteria: parseString(hospitalDischarge.criteria, 'Criteria'),
+  };
+};
+
+const parseSickLeave = (arg: unknown): SickLeave => {
+  if (!isSickLeave(arg))
+    throw new Error('Sick leave must conform to its type.');
+
+  return {
+    startDate: parseDate(arg.startDate),
+    endDate: parseDate(arg.endDate),
+  };
+};
+
+const parseTypeSpecificEntryProperties = (entry: Entry): TypeSpecificEntry => {
+  switch (entry.type) {
+    case 'HealthCheck':
+      return {
+        type: entry.type,
+        healthCheckRating: parseHealthCheckRating(entry.healthCheckRating),
+      };
+    case 'Hospital':
+      return {
+        type: entry.type,
+        discharge: parseHospitalDischarge(entry.discharge),
+      };
+    case 'OccupationalHealthcare':
+      return {
+        type: entry.type,
+        employerName: parseString(entry.employerName, 'Employer name'),
+        ...((): object =>
+          'sickLeave' in entry
+            ? { sickLeave: parseSickLeave(entry.sickLeave) }
+            : {})(),
+      };
+    default:
+      return assertNever(entry);
+  }
+};
+
 const parseEntries = (entries: unknown): Entry[] => {
   if (isUndefinedOrNull(entries)) return [];
 
@@ -99,5 +207,20 @@ export const toNewPatient = ({
     occupation: parseString(occupation, 'Occupation'),
     gender: parseGender(gender),
     entries: parseEntries(entries),
+  };
+};
+
+export const toNewEntry = (entry: Record<string, unknown>): NewEntry => {
+  if (!isEntry(entry)) throw new Error('Data must conform to the Entry type.');
+
+  return {
+    description: parseString(entry.description, 'Description'),
+    date: parseDate(entry.date),
+    specialist: parseString(entry.specialist, 'Specialist'),
+    ...((): object =>
+      'diagnosisCodes' in entry
+        ? { diagnosisCodes: parseDiagnosisCodes(entry.diagnosisCodes) }
+        : {})(),
+    ...parseTypeSpecificEntryProperties(entry),
   };
 };

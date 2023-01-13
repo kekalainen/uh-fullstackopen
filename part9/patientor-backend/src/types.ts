@@ -1,3 +1,5 @@
+type UnionOmit<T, K extends keyof T> = T extends unknown ? Omit<T, K> : never;
+
 export interface Diagnosis {
   code: string;
   name: string;
@@ -37,7 +39,7 @@ interface HealthCheckEntry extends BaseEntry {
   healthCheckRating: HealthCheckRating;
 }
 
-interface HospitalDischarge {
+export interface HospitalDischarge {
   date: string;
   criteria: string;
 }
@@ -47,7 +49,7 @@ interface HospitalEntry extends BaseEntry {
   discharge: HospitalDischarge;
 }
 
-interface SickLeave {
+export interface SickLeave {
   startDate: string;
   endDate: string;
 }
@@ -76,3 +78,7 @@ export interface Patient {
 export type NonSensitivePatient = Omit<Patient, 'ssn' | 'entries'>;
 
 export type NewPatient = Omit<Patient, 'id'>;
+
+export type TypeSpecificEntry = UnionOmit<Entry, keyof Omit<BaseEntry, 'type'>>;
+
+export type NewEntry = UnionOmit<Entry, 'id'>;
